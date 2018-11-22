@@ -1,0 +1,32 @@
+{
+  "name": "lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && copy package.json built",
+    "typechain": "typechain --target=web3-1.0.0 \"abi/*.json\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/underscore": "^1.8.9",
+    "@types/web3": "^1.0.12",
+    "ethereum-types": "^1.1.2",
+    "husky": "^1.2.0",
+    "lint-staged": "^8.1.0",
+    "prettier": "^1.15.2",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.16.0",
+    "tslint-microsoft-contrib": "^5.2.1",
+    "tslint-sonarts": "^1.8.0",
+    "typechain": "^0.3.9",
+    "typescript": "^3.1.6"
+  },
+  "dependencies": {
+    "bignumber.js": "5.0.0",
+    "moment": "^2.22.2",
+    "web3": "^1.0.0-beta.36"
+  }
+}

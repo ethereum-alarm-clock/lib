@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "suppressImplicitAnyIndexErrors": true,
+        "noImplicitAny": true,
+        "noUnusedLocals": true,
+        "noImplicitReturns": true,
+        "noUnusedParameters": true,
+        "outDir": "./built",
+        "allowJs": true,
+        "lib": [
+            "es2015"
+        ],
+        "target": "es2015",
+        "moduleResolution": "node",
+        "module": "none",
+        "sourceMap": true
+    },
+    "include": [
+        "./src/**/*",
+        "./test/**/*"
+    ]
+}
