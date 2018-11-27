@@ -14,7 +14,7 @@ dist/
 dist/*
 stats.db
 .env
-config/contracts/test.json
+config/contracts/1002.json
 
 # Coverage directory
 coverage

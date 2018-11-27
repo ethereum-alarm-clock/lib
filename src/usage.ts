@@ -6,8 +6,8 @@ import * as moment from 'moment';
 /* globals window */
 
 async function getWeb3() {
-  const WEB3_PROVIDER =
-    'https://rarely-suitable-shark.quiknode.io/87817da9-942d-4275-98c0-4176eee51e1a/aB5gwSfQdN4jmkS65F1HyA==/';
+  const WEB3_PROVIDER = 'http://localhost:8545';
+  // 'https://rarely-suitable-shark.quiknode.io/87817da9-942d-4275-98c0-4176eee51e1a/aB5gwSfQdN4jmkS65F1HyA==/';
   let web3;
 
   // if (typeof(window) !== 'undefined' && window.ethereum) {

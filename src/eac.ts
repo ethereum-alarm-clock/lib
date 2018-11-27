@@ -2,13 +2,20 @@ import BigNumber from 'bignumber.js';
 import Web3 = require('web3');
 import TimestampSchedulerABI from './abi/TimestampScheduler';
 import { TimestampScheduler } from '../types/web3-contracts/TimestampScheduler';
+import * as AddressesJSONKovan from '../config/contracts/42.json';
+import * as AddressesJSONTest from '../config/contracts/1002.json';
+import { TransactionReceipt } from 'web3/types';
+import PromiEvent from 'web3/promiEvent';
+
+const NETWORK_TO_ADDRESSES_MAPPING = {
+  42: AddressesJSONKovan,
+  1002: AddressesJSONTest
+};
 
 type Address = string;
 
 const MINIMUM_WINDOW_SIZE_TIMESTAMP = new BigNumber(5 * 60); // 5 minutes
 const MINIMUM_WINDOW_SIZE_BLOCK = new BigNumber(5);
-
-const TIMESTAMP_SCHEDULER_KOVAN_ADDRESS = '0x44b28e47fe781eabf8095a2a21449a82a635745b';
 
 interface SchedulingOptions {
   toAddress: Address;
@@ -36,12 +43,9 @@ export default class EAC {
 
   public async computeEndowment(options: SchedulingOptions) {
     this.assertRequiredOptionsArePresent(options);
-    options = this.fillMissingOptions(options);
+    options = await this.fillMissingOptions(options);
 
-    const scheduler = new this.web3.eth.Contract(
-      TimestampSchedulerABI,
-      TIMESTAMP_SCHEDULER_KOVAN_ADDRESS
-    ) as TimestampScheduler;
+    const scheduler = await this.getTimestampScheduler();
 
     return scheduler.methods
       .computeEndowment(
@@ -57,17 +61,16 @@ export default class EAC {
   public async schedule(options: SchedulingOptions) {
     this.assertRequiredOptionsArePresent(options);
 
-    options = this.fillMissingOptions(options);
+    options = await this.fillMissingOptions(options);
 
-    const scheduler = new this.web3.eth.Contract(
-      TimestampSchedulerABI,
-      TIMESTAMP_SCHEDULER_KOVAN_ADDRESS
-    ) as TimestampScheduler;
+    const scheduler = await this.getTimestampScheduler();
 
     const endowment = await this.computeEndowment(options);
 
-    const encodedABI = scheduler.methods
-      .schedule(options.toAddress, this.web3.utils.fromAscii(options.callData), [
+    const scheduleTransaction = scheduler.methods.schedule(
+      options.toAddress,
+      this.web3.utils.fromAscii(options.callData),
+      [
         options.callGas.toString(),
         options.callValue.toString(),
         options.windowSize.toString(),
@@ -76,20 +79,27 @@ export default class EAC {
         options.fee.toString(),
         options.bounty.toString(),
         options.requiredDeposit.toString()
-      ])
-      .encodeABI();
+      ]
+    );
+
+    const encodedABI = scheduleTransaction.encodeABI();
 
     const tx = {
-      from: '0xd8c6F58BbF71E0739E4CCfe9f9721a07285bB895',
+      from: options.from,
       to: scheduler._address,
       data: encodedABI,
       value: endowment,
       gas: 600000
     };
 
-    const signedTx = await this.web3.eth.accounts.signTransaction(tx, this.privateKey);
+    let sentTx: PromiEvent<TransactionReceipt>;
 
-    const sentTx = this.web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+    if (this.privateKey) {
+      const signedTx = await this.web3.eth.accounts.signTransaction(tx, this.privateKey);
+      sentTx = this.web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+    } else {
+      sentTx = this.web3.eth.sendTransaction(tx);
+    }
 
     sentTx
       .on('confirmation', confirmationNumber => {
@@ -106,6 +116,27 @@ export default class EAC {
       .on('error', console.error);
   }
 
+  private async getNetworkId() {
+    return this.web3.eth.net.getId();
+  }
+
+  private async getTimestampScheduler() {
+    const netId = await this.getNetworkId();
+
+    const addresses = NETWORK_TO_ADDRESSES_MAPPING[netId];
+
+    if (!addresses) {
+      throw Error(`Network with id: "${netId}" is not supported.`);
+    }
+
+    const scheduler = new this.web3.eth.Contract(
+      TimestampSchedulerABI,
+      (addresses as any).timestampScheduler
+    ) as TimestampScheduler;
+
+    return scheduler;
+  }
+
   private assertRequiredOptionsArePresent(options: SchedulingOptions) {
     if (!options.toAddress) {
       throw new Error('toAddress in SchedulingOptions needs to be present.');
@@ -116,7 +147,7 @@ export default class EAC {
     }
   }
 
-  private fillMissingOptions(options: SchedulingOptions): SchedulingOptions {
+  private async fillMissingOptions(options: SchedulingOptions): Promise<SchedulingOptions> {
     if (typeof options.timestampScheduling === 'undefined') {
       options.timestampScheduling = true;
     }
@@ -126,7 +157,8 @@ export default class EAC {
     }
 
     if (typeof options.from === 'undefined') {
-      options.from = this.web3.eth.accounts[0];
+      const accounts = await this.web3.eth.getAccounts();
+      options.from = accounts[0];
     }
 
     if (typeof options.callData === 'undefined') {

@@ -1,5 +1,5 @@
 const artifactsDir = `${__dirname}/../node_modules/@ethereum-alarm-clock/contracts/build/contracts`;
-const contractsJSONDestination = `${__dirname}/../config/contracts/test.json`;
+const contractsJSONDestination = `${__dirname}/../config/contracts/1002.json`;
 const fs = require('fs');
 const path = require('path');
 
