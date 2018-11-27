@@ -129,12 +129,10 @@ export default class EAC {
       throw Error(`Network with id: "${netId}" is not supported.`);
     }
 
-    const scheduler = new this.web3.eth.Contract(
+    return new this.web3.eth.Contract(
       TimestampSchedulerABI,
       (addresses as any).timestampScheduler
     ) as TimestampScheduler;
-
-    return scheduler;
   }
 
   private assertRequiredOptionsArePresent(options: SchedulingOptions) {
