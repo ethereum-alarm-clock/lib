@@ -7,31 +7,38 @@
     "compile": "tsc",
     "ganache": "ganache-cli -m \"shove afford modify census bridge good random error fault floor fringe oblige\" -i 1002 -b 1",
     "lint": "tslint --project .",
-    "typechain": "typechain --target=web3-1.0.0 \"abi/*.json\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "typechain": "typechain --target=web3-1.0.0 \"src/abi/*.json\"",
+    "test": "npm run test:e2e && npm run test:unit",
+    "test:e2e": "mocha --timeout 50000 -r ts-node/register tests/e2e/*.ts --exit",
+    "test:unit": "mocha --timeout 50000 -r ts-node/register tests/unit/*.ts --exit"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@ethereum-alarm-clock/contracts": "^1.0.0-rc.2",
-    "@types/underscore": "^1.8.9",
-    "@types/web3": "^1.0.12",
-    "ethereum-types": "^1.1.2",
-    "ganache-cli": "^6.2.3",
-    "husky": "^1.2.0",
-    "lint-staged": "^8.1.0",
-    "prettier": "^1.15.2",
-    "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.16.0",
-    "tslint-microsoft-contrib": "^5.2.1",
-    "tslint-sonarts": "^1.8.0",
-    "typechain": "^0.3.9",
-    "typescript": "^3.1.6"
+    "@ethereum-alarm-clock/contracts": "1.0.0-rc.2",
+    "@types/chai": "4.1.7",
+    "@types/underscore": "1.8.9",
+    "@types/web3": "1.0.12",
+    "chai": "4.2.0",
+    "ethereum-types": "1.1.2",
+    "ganache-cli": "6.2.3",
+    "husky": "1.2.0",
+    "lint-staged": "8.1.0",
+    "mocha": "5.2.0",
+    "mocha-typescript": "1.1.17",
+    "prettier": "1.15.2",
+    "ts-node": "7.0.1",
+    "tslint": "5.11.0",
+    "tslint-config-prettier": "1.16.0",
+    "tslint-microsoft-contrib": "5.2.1",
+    "tslint-sonarts": "1.8.0",
+    "typechain": "0.3.9",
+    "typescript": "3.1.6"
   },
   "dependencies": {
     "bignumber.js": "5.0.0",
-    "moment": "^2.22.2",
-    "web3": "^1.0.0-beta.36"
+    "moment": "2.22.2",
+    "web3": "1.0.0-beta.36"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
