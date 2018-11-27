@@ -7,7 +7,6 @@
     "compile": "tsc",
     "ganache": "ganache-cli -m \"shove afford modify census bridge good random error fault floor fringe oblige\" -i 1002 -b 1",
     "lint": "tslint --project .",
-    "precommit": "lint-staged",
     "typechain": "typechain --target=web3-1.0.0 \"abi/*.json\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -40,5 +39,10 @@
       "prettier --write --config ./.prettierrc --config-precedence file-override",
       "git add"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   }
 }
