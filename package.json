@@ -4,16 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && copy package.json built",
+    "compile": "tsc",
+    "ganache": "ganache-cli -m \"shove afford modify census bridge good random error fault floor fringe oblige\" -i 1002 -b 1",
+    "lint": "tslint --project .",
     "typechain": "typechain --target=web3-1.0.0 \"abi/*.json\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@ethereum-alarm-clock/contracts": "^1.0.0-rc.2",
     "@types/underscore": "^1.8.9",
     "@types/web3": "^1.0.12",
     "ethereum-types": "^1.1.2",
+    "ganache-cli": "^6.2.3",
     "husky": "^1.2.0",
     "lint-staged": "^8.1.0",
     "prettier": "^1.15.2",

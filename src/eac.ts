@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import Web3 = require('web3');
 import TimestampSchedulerABI from './abi/TimestampScheduler';
-import { TimestampScheduler } from './web3-contracts/TimestampScheduler';
+import { TimestampScheduler } from '../types/web3-contracts/TimestampScheduler';
 
 type Address = string;
 
@@ -40,15 +40,13 @@ export default class EAC {
 
         const scheduler = new this.web3.eth.Contract(TimestampSchedulerABI, TIMESTAMP_SCHEDULER_KOVAN_ADDRESS) as TimestampScheduler;
 
-        const result = await scheduler.methods.computeEndowment(
+        return scheduler.methods.computeEndowment(
             options.bounty.toString(),
             options.fee.toString(),
             options.callGas.toString(),
             options.callValue.toString(),
             options.gasPrice.toString()
         ).call();
-            
-        return result;
     }
 
     public async schedule(options : SchedulingOptions) {
