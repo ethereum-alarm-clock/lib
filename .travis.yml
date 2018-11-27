@@ -17,3 +17,4 @@ script:
   - npm run lint
   - ./scripts/deployContracts.sh
   - ./scripts/build.sh
+  - npm run test
