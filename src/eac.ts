@@ -18,6 +18,11 @@ const NETWORK_TO_ADDRESSES_MAPPING = {
   1002: AddressesJSONTest
 };
 
+export enum TemporalUnit {
+  BLOCK = 1,
+  TIME = 2
+}
+
 type Address = string;
 
 const MINIMUM_WINDOW_SIZE_TIMESTAMP = new BigNumber(5 * 60); // 5 minutes
@@ -142,7 +147,7 @@ export default class EAC {
       addresses.requestFactory
     ) as RequestFactory;
 
-    const temporalUnit = options.timestampScheduling ? 2 : 1;
+    const temporalUnit = options.timestampScheduling ? TemporalUnit.TIME : TemporalUnit.BLOCK;
     const freezePeriod = options.timestampScheduling ? 3 * 60 : 10; // 3 minutes or 10 blocks
     const reservedWindowSize = options.timestampScheduling ? 5 * 60 : 16; // 5 minutes or 16 blocks
     const claimWindowSize = options.timestampScheduling ? 60 * 60 : 255; // 60 minutes or 255 blocks
