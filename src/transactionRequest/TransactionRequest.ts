@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import TransactionRequestData from './TransactionRequestData';
-import Constants from '../constants';
+import Constants from '../Constants';
 import Util from '../utils/Util';
 import Web3 = require('web3');
 import TransactionRequestCoreABI from '../abi/TransactionRequestCore';
