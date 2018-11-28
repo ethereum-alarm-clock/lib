@@ -12,6 +12,8 @@ import { TransactionReceipt } from 'web3/types';
 import PromiEvent from 'web3/promiEvent';
 import Constants from './Constants';
 import { RequestFactory } from '../types/web3-contracts/RequestFactory';
+import TransactionRequest from './transactionRequest/TransactionRequest';
+import { Util } from '.';
 
 const NETWORK_TO_ADDRESSES_MAPPING = {
   42: AddressesJSONKovan,
@@ -26,7 +28,12 @@ export enum TemporalUnit {
 type Address = string;
 
 const MINIMUM_WINDOW_SIZE_TIMESTAMP = new BigNumber(5 * 60); // 5 minutes
-const MINIMUM_WINDOW_SIZE_BLOCK = new BigNumber(16); // 16 blocks
+export const MINIMUM_WINDOW_SIZE_BLOCK = new BigNumber(16); // 16 blocks
+export const CLAIM_WINDOW_SIZE_BLOCK = 255;
+
+export const DEFAULT_BOUNTY = new BigNumber('10000000000000000'); // 0.01 ETH
+export const DEFAULT_GAS_PRICE = new BigNumber('30000000000'); // 30 Gwei
+export const DEFAULT_WINDOW_SIZE_BLOCK = MINIMUM_WINDOW_SIZE_BLOCK.times(2);
 
 interface SchedulingOptions {
   toAddress: Address;
@@ -54,11 +61,13 @@ enum SchedulingParamsError {
 
 export default class EAC {
   private privateKey: string;
+  private util: Util;
   private web3: Web3;
 
   constructor(web3: Web3, privateKey?: string) {
     this.web3 = web3;
     this.privateKey = privateKey;
+    this.util = new Util(web3);
   }
 
   public async computeEndowment(options: SchedulingOptions) {
@@ -140,7 +149,7 @@ export default class EAC {
     return '0x'.concat(foundLog.data.slice(-40));
   }
 
-  private async validateScheduleOptions(options: SchedulingOptions, endowment: string) {
+  public async validateScheduleOptions(options: SchedulingOptions, endowment: string) {
     const addresses = await this.getContractsAddresses();
     const requestLib = new this.web3.eth.Contract(
       RequestFactoryABI,
@@ -150,7 +159,7 @@ export default class EAC {
     const temporalUnit = options.timestampScheduling ? TemporalUnit.TIME : TemporalUnit.BLOCK;
     const freezePeriod = options.timestampScheduling ? 3 * 60 : 10; // 3 minutes or 10 blocks
     const reservedWindowSize = options.timestampScheduling ? 5 * 60 : 16; // 5 minutes or 16 blocks
-    const claimWindowSize = options.timestampScheduling ? 60 * 60 : 255; // 60 minutes or 255 blocks
+    const claimWindowSize = options.timestampScheduling ? 60 * 60 : CLAIM_WINDOW_SIZE_BLOCK; // 60 minutes or 255 blocks
 
     const addressArgs = [
       options.from,
@@ -190,8 +199,14 @@ export default class EAC {
     }
   }
 
-  private async getNetworkId() {
-    return this.web3.eth.net.getId();
+  public transactionRequest(address: string) {
+    return new TransactionRequest(address, this.web3);
+  }
+
+  public transactionRequestFromReceipt(receipt: TransactionReceipt): TransactionRequest {
+    const address = this.util.getTransactionRequestAddressFromReceipt(receipt);
+
+    return this.transactionRequest(address);
   }
 
   private parseSchedulingParametersValidity(paramsValidity: boolean[]) {
@@ -216,7 +231,7 @@ export default class EAC {
   }
 
   private async getContractsAddresses() {
-    const netId = await this.getNetworkId();
+    const netId = await this.web3.eth.net.getId();
 
     const addresses = NETWORK_TO_ADDRESSES_MAPPING[netId];
 
@@ -251,7 +266,7 @@ export default class EAC {
     }
 
     if (typeof options.bounty === 'undefined') {
-      options.bounty = new BigNumber(this.web3.utils.toWei('0.01', 'ether'));
+      options.bounty = DEFAULT_BOUNTY;
     }
 
     if (typeof options.from === 'undefined') {
@@ -279,7 +294,7 @@ export default class EAC {
     }
 
     if (typeof options.gasPrice === 'undefined') {
-      options.gasPrice = new BigNumber('30');
+      options.gasPrice = DEFAULT_GAS_PRICE;
     }
 
     if (typeof options.fee === 'undefined') {

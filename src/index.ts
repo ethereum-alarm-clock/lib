@@ -1,4 +1,4 @@
 import EAC from './eac';
-import W3Util from './W3Util';
+import Util from './utils/Util';
 
-export { EAC, W3Util };
+export { EAC, Util };

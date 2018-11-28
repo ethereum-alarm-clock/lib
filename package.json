@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc",
-    "ganache": "ganache-cli -m \"shove afford modify census bridge good random error fault floor fringe oblige\" -i 1002 -b 1",
+    "ganache": "ganache-cli -m \"shove afford modify census bridge good random error fault floor fringe oblige\" -i 1002",
     "lint": "tslint --project .",
     "typechain": "typechain --target=web3-1.0.0 \"src/abi/*.json\"",
     "test": "npm run test:e2e && npm run test:unit",

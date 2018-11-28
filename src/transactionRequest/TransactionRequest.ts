@@ -1,15 +1,13 @@
 import BigNumber from 'bignumber.js';
 import TransactionRequestData from './TransactionRequestData';
 import Constants from '../constants';
-import UtilObject from '../utils/Util';
+import Util from '../utils/Util';
 import Web3 = require('web3');
 import TransactionRequestCoreABI from '../abi/TransactionRequestCore';
 import { TransactionRequestCore } from '../../types/web3-contracts/TransactionRequestCore';
 import { TemporalUnit } from '../eac';
 import { EventLog } from 'web3/types';
 import { ITransactionRequest } from './ITransactionRequest';
-
-const Util = UtilObject();
 
 interface ExecutedEvent {
   blockNumber: number;
@@ -22,9 +20,12 @@ export default class TransactionRequest implements ITransactionRequest {
   private data: TransactionRequestData;
   private instance: TransactionRequestCore;
   private web3: Web3;
+  private util: Util;
 
   constructor(address: string, web3: Web3) {
-    if (!Util.checkNotNullAddress(address)) {
+    this.util = new Util(web3);
+
+    if (!this.util.isNotNullAddress(address)) {
       throw new Error('Attempted to instantiate a TxRequest class from a null address.');
     }
 
