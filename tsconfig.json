@@ -6,13 +6,13 @@
         "noImplicitReturns": true,
         "noUnusedParameters": true,
         "outDir": "./built",
-        "allowJs": true,
         "lib": [
             "es2015"
         ],
         "target": "es2015",
         "moduleResolution": "node",
         "module": "none",
+        "declaration": true,
         "sourceMap": true
     },
     "include": [

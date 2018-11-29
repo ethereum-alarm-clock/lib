@@ -1,6 +1,6 @@
 {
-  "name": "lib",
-  "version": "1.0.0",
+  "name": "@ethereum-alarm-clock/lib",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -12,8 +12,16 @@
     "test:e2e": "mocha --timeout 50000 -r ts-node/register tests/e2e/*.ts --exit",
     "test:unit": "mocha --timeout 50000 -r ts-node/register tests/unit/*.ts --exit"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Kuzirashi",
+  "contributors": [
+    {
+      "name": "Bagaric"
+    },
+    {
+      "name": "kosecki123"
+    }
+  ],
+  "license": "MIT",
   "devDependencies": {
     "@ethereum-alarm-clock/contracts": "1.0.0-rc.2",
     "@types/chai": "4.1.7",
