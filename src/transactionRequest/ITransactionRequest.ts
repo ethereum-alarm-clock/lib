@@ -2,8 +2,14 @@ import { BigNumber } from 'bignumber.js';
 
 export interface ITransactionRequest {
   address: string;
+  callValue: BigNumber;
+  cancelData: string;
   claimedBy: string;
+  claimWindowSize: BigNumber;
+  fee: BigNumber;
+  owner: string;
   requiredDeposit: BigNumber;
+  toAddress: string;
   claimData: string;
   executeData: string;
   bounty: BigNumber;
@@ -15,6 +21,7 @@ export interface ITransactionRequest {
   executionWindowEnd: BigNumber;
   temporalUnit: number;
   claimWindowStart: BigNumber;
+  wasSuccessful: boolean;
   windowStart: BigNumber;
   windowSize: BigNumber;
   freezePeriod: BigNumber;
@@ -23,7 +30,11 @@ export interface ITransactionRequest {
   freezePeriodEnd: BigNumber;
   reservedWindowEnd: BigNumber;
 
-  refreshData(): Promise<any>;
+  afterExecutionWindow(): Promise<boolean>;
+  callData(): Promise<string[]>;
+  executedAt(): Promise<number>;
+  fillData(): Promise<void>;
+  refreshData(): Promise<void>;
   claimPaymentModifier(): Promise<BigNumber>;
   inReservedWindow(): Promise<boolean>;
   beforeClaimWindow(): Promise<boolean>;

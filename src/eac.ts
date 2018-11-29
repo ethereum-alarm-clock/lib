@@ -5,15 +5,15 @@ import BigNumber from 'bignumber.js';
 import Web3 = require('web3');
 import SchedulerInterfaceABI from './abi/SchedulerInterface';
 import { SchedulerInterface } from '../types/web3-contracts/SchedulerInterface';
-import RequestFactoryABI from './abi/RequestFactory';
 import * as AddressesJSONKovan from '../config/contracts/42.json';
 import * as AddressesJSONTest from '../config/contracts/1002.json';
 import { TransactionReceipt } from 'web3/types';
 import PromiEvent from 'web3/promiEvent';
 import Constants from './Constants';
-import { RequestFactory } from '../types/web3-contracts/RequestFactory';
+import RequestFactory from './requestFactory/RequestFactory';
 import TransactionRequest from './transactionRequest/TransactionRequest';
 import { Util } from '.';
+import { ITransactionRequest } from './transactionRequest/ITransactionRequest';
 
 const NETWORK_TO_ADDRESSES_MAPPING = {
   42: AddressesJSONKovan,
@@ -60,8 +60,9 @@ enum SchedulingParamsError {
 }
 
 export default class EAC {
+  public util: Util;
+
   private privateKey: string;
-  private util: Util;
   private web3: Web3;
 
   constructor(web3: Web3, privateKey?: string) {
@@ -150,11 +151,7 @@ export default class EAC {
   }
 
   public async validateScheduleOptions(options: SchedulingOptions, endowment: string) {
-    const addresses = await this.getContractsAddresses();
-    const requestLib = new this.web3.eth.Contract(
-      RequestFactoryABI,
-      addresses.requestFactory
-    ) as RequestFactory;
+    const requestFactory = await this.requestFactory();
 
     const temporalUnit = options.timestampScheduling ? TemporalUnit.TIME : TemporalUnit.BLOCK;
     const freezePeriod = options.timestampScheduling ? 3 * 60 : 10; // 3 minutes or 10 blocks
@@ -182,7 +179,7 @@ export default class EAC {
       options.requiredDeposit.toString()
     ];
 
-    const paramsValidity = await requestLib.methods
+    const paramsValidity = await requestFactory.instance.methods
       .validateRequestParams(addressArgs, uintArgs, endowment)
       .call();
 
@@ -199,11 +196,17 @@ export default class EAC {
     }
   }
 
-  public transactionRequest(address: string) {
+  public async requestFactory(): Promise<RequestFactory> {
+    const addresses = await this.getContractsAddresses();
+
+    return new RequestFactory(addresses.requestFactory, this.web3);
+  }
+
+  public transactionRequest(address: string): ITransactionRequest {
     return new TransactionRequest(address, this.web3);
   }
 
-  public transactionRequestFromReceipt(receipt: TransactionReceipt): TransactionRequest {
+  public transactionRequestFromReceipt(receipt: TransactionReceipt): ITransactionRequest {
     const address = this.util.getTransactionRequestAddressFromReceipt(receipt);
 
     return this.transactionRequest(address);

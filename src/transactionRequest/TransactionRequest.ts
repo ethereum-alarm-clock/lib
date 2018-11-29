@@ -287,16 +287,16 @@ export default class TransactionRequest implements ITransactionRequest {
    * Data management
    */
 
-  public async fillData() {
+  public async fillData(): Promise<void> {
     const requestData = await TransactionRequestData.from(this.instance);
     this.data = requestData;
-    return true;
   }
 
-  public async refreshData() {
+  public async refreshData(): Promise<void> {
     if (!this.data) {
       return this.fillData();
     }
+
     return this.data.refresh();
   }
 
