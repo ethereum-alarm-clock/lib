@@ -67,9 +67,9 @@ export default class W3Util {
     return url.includes('http://') || url.includes('https://');
   }
 
-  public static isWatchingEnabled(web3: any): Promise<boolean> {
+  public static isWatchingEnabled(web3: Web3): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-      web3.currentProvider.sendAsync(
+      web3.currentProvider.send(
         {
           jsonrpc: '2.0',
           id: new Date().getTime(),
