@@ -26,7 +26,6 @@
   "devDependencies": {
     "@ethereum-alarm-clock/contracts": "1.0.0-rc.2",
     "@types/chai": "4.1.7",
-    "@types/ethereumjs-util": "5.2.0",
     "@types/underscore": "1.8.9",
     "@types/web3": "1.0.12",
     "chai": "4.2.0",
@@ -46,6 +45,7 @@
     "typescript": "3.1.6"
   },
   "dependencies": {
+    "@types/ethereumjs-util": "5.2.0",
     "bignumber.js": "5.0.0",
     "ethereumjs-util": "6.0.0",
     "moment": "2.22.2",
