@@ -162,9 +162,10 @@ export default class TransactionRequest implements ITransactionRequest {
    * Claim props/methods
    */
 
-  get claimedBy() {
+  get claimedBy(): string {
     this.checkData();
-    return this.data.claimData.claimedBy;
+
+    return this.data.claimData.claimedBy.toLowerCase();
   }
 
   get isClaimed() {
@@ -242,7 +243,8 @@ export default class TransactionRequest implements ITransactionRequest {
 
   get owner() {
     this.checkData();
-    return this.data.meta.owner;
+
+    return this.data.meta.owner.toLowerCase();
   }
 
   /**
