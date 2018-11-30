@@ -38,7 +38,7 @@ export default class TransactionRequest implements ITransactionRequest {
   }
 
   get address(): string {
-    return this.instance._address;
+    return this.instance._address.toLowerCase();
   }
 
   /**
