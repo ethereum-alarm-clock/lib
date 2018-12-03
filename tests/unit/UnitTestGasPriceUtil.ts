@@ -1,4 +1,4 @@
-import { expect, assert } from 'chai';
+import { assert } from 'chai';
 import { Util, GasPriceUtil } from '../../src';
 import { providerUrl } from '../helpers';
 

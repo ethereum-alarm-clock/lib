@@ -78,10 +78,10 @@ describe('ScheduleTx', () => {
     expect(await tx.inReservedWindow()).to.equal(false);
     expect(tx.isCancelled).to.equal(false);
     expect(tx.isClaimed).to.equal(false);
-    expect(tx.owner).to.equal(mainAccount);
+    expect(tx.owner).to.equal(mainAccount, 'owner is main account');
     expect(tx.requiredDeposit.toString()).to.equal('0');
     expect(tx.temporalUnit).to.equal(TemporalUnit.BLOCK);
-    expect(tx.toAddress).to.equal(secondaryAccount);
+    expect(tx.toAddress).to.equal(secondaryAccount, 'to account is secondary account');
     expect(tx.wasCalled).to.equal(false);
     expect(tx.wasSuccessful).to.equal(false);
     expect(tx.windowSize.toString()).to.equal(DEFAULT_WINDOW_SIZE_BLOCK.toString());

@@ -253,7 +253,7 @@ export default class TransactionRequest implements ITransactionRequest {
 
   get toAddress() {
     this.checkData();
-    return this.data.txData.toAddress;
+    return this.data.txData.toAddress && this.data.txData.toAddress.toLowerCase();
   }
 
   get callGas() {
