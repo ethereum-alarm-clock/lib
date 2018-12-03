@@ -5,8 +5,6 @@ import BigNumber from 'bignumber.js';
 import Web3 = require('web3');
 import SchedulerInterfaceABI from './abi/SchedulerInterface';
 import { SchedulerInterface } from '../types/web3-contracts/SchedulerInterface';
-import * as AddressesJSONKovan from '../config/contracts/42.json';
-import * as AddressesJSONTest from '../config/contracts/1002.json';
 import { TransactionReceipt } from 'web3/types';
 import PromiEvent from 'web3/promiEvent';
 import Constants from './Constants';
@@ -14,11 +12,6 @@ import RequestFactory from './requestFactory/RequestFactory';
 import TransactionRequest from './transactionRequest/TransactionRequest';
 import { Util } from '.';
 import { ITransactionRequest } from './transactionRequest/ITransactionRequest';
-
-const NETWORK_TO_ADDRESSES_MAPPING = {
-  42: AddressesJSONKovan,
-  1002: AddressesJSONTest
-};
 
 export enum TemporalUnit {
   BLOCK = 1,
@@ -197,7 +190,7 @@ export default class EAC {
   }
 
   public async requestFactory(): Promise<RequestFactory> {
-    const addresses = await this.getContractsAddresses();
+    const addresses = await this.util.getContractsAddresses();
 
     return new RequestFactory(addresses.requestFactory, this.web3);
   }
@@ -233,20 +226,8 @@ export default class EAC {
     return errors;
   }
 
-  private async getContractsAddresses() {
-    const netId = await this.web3.eth.net.getId();
-
-    const addresses = NETWORK_TO_ADDRESSES_MAPPING[netId];
-
-    if (!addresses) {
-      throw Error(`Network with id: "${netId}" is not supported.`);
-    }
-
-    return addresses;
-  }
-
   private async getScheduler(timestamp = true): Promise<SchedulerInterface> {
-    const addresses = await this.getContractsAddresses();
+    const addresses = await this.util.getContractsAddresses();
 
     const address = timestamp ? addresses.timestampScheduler : addresses.blockScheduler;
 

@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-export interface ITransactionRequest {
+export interface ITransactionRequest extends ITransactionRequestPending {
   address: string;
   callValue: BigNumber;
   cancelData: string;
@@ -43,4 +43,14 @@ export interface ITransactionRequest {
   inExecutionWindow(): Promise<boolean>;
   now(): Promise<BigNumber>;
   isClaimedBy(address: string): boolean;
+}
+
+export interface ITransactionRequestPending {
+  address: string;
+  gasPrice: BigNumber;
+}
+
+export interface ITransactionRequestRaw {
+  address: string;
+  params: string[];
 }

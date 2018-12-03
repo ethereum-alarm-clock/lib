@@ -3,6 +3,9 @@ import Web3 = require('web3');
 import Constants from '../Constants';
 import * as ethUtil from 'ethereumjs-util';
 import { TransactionReceipt } from 'web3/types';
+import { Provider } from 'web3/providers';
+import * as AddressesJSONKovan from '../config/contracts/42.json';
+import * as AddressesJSONTest from '../config/contracts/1002.json';
 
 const NETWORK_ID = {
   MAINNET: '1',
@@ -14,7 +17,11 @@ const NETWORK_ID = {
   TOBALABA: '401697'
 };
 
-const NETWORK_ID_TO_NAME_MAP = {
+interface NetworkIdToNameMapType {
+  [key: string]: EAC_NETWORK_NAME;
+}
+
+const NETWORK_ID_TO_NAME_MAP: NetworkIdToNameMapType = {
   [NETWORK_ID.MAINNET]: 'mainnet',
   [NETWORK_ID.ROPSTEN]: 'ropsten',
   [NETWORK_ID.RINKEBY]: 'rinkeby',
@@ -22,6 +29,27 @@ const NETWORK_ID_TO_NAME_MAP = {
   [NETWORK_ID.DOCKER]: 'docker',
   [NETWORK_ID.DEVELOPMENT]: 'development',
   [NETWORK_ID.TOBALABA]: 'tobalaba'
+};
+
+type EAC_NETWORK_NAME =
+  | 'mainnet'
+  | 'ropsten'
+  | 'rinkeby'
+  | 'kovan'
+  | 'docker'
+  | 'development'
+  | 'tobalaba'
+  | 'tester';
+
+const REQUEST_FACTORY_STARTBLOCKS = {
+  [NETWORK_ID.MAINNET]: 6204104,
+  [NETWORK_ID.ROPSTEN]: 2594245,
+  [NETWORK_ID.KOVAN]: 5555500
+};
+
+const NETWORK_TO_ADDRESSES_MAPPING = {
+  42: AddressesJSONKovan,
+  1002: AddressesJSONTest
 };
 
 /**
@@ -50,15 +78,16 @@ const NETWORK_ID_TO_NAME_MAP = {
 //   })
 // }
 
-export default class W3Util {
-  public static getWeb3FromProviderUrl(providerUrl: string) {
-    let provider: any;
+export default class Util {
+  public static getWeb3FromProviderUrl(providerUrl: string): Web3 {
+    let provider: Provider;
 
     if (this.isHTTPConnection(providerUrl)) {
       provider = new Web3.providers.HttpProvider(providerUrl);
     } else if (this.isWSConnection(providerUrl)) {
       provider = new Web3.providers.WebsocketProvider(providerUrl);
-      provider.__proto__.sendAsync = provider.__proto__.sendAsync || provider.__proto__.send;
+    } else {
+      throw Error('Unsupported provider.');
     }
 
     return new Web3(provider);
@@ -88,13 +117,13 @@ export default class W3Util {
   }
 
   public static testProvider(providerUrl: string): Promise<boolean> {
-    const web3 = W3Util.getWeb3FromProviderUrl(providerUrl);
-    return W3Util.isWatchingEnabled(web3);
+    const web3 = Util.getWeb3FromProviderUrl(providerUrl);
+    return Util.isWatchingEnabled(web3);
   }
 
   private web3: Web3;
 
-  constructor(web3?: Web3) {
+  constructor(web3: Web3) {
     this.web3 = web3;
   }
 
@@ -144,7 +173,7 @@ export default class W3Util {
    *
    * @param {Web3} web3
    */
-  public async getChainName() {
+  public async getChainName(): Promise<EAC_NETWORK_NAME> {
     const netId = await this.web3.eth.net.getId();
 
     if (netId > 1517361627) {
@@ -152,5 +181,23 @@ export default class W3Util {
     }
 
     return NETWORK_ID_TO_NAME_MAP[netId];
+  }
+
+  public async getRequestFactoryStartBlock(): Promise<number> {
+    const netId = await this.web3.eth.net.getId();
+
+    return REQUEST_FACTORY_STARTBLOCKS[netId] || 0;
+  }
+
+  public async getContractsAddresses(): Promise<EACAddresses> {
+    const netId = await this.web3.eth.net.getId();
+
+    const addresses = NETWORK_TO_ADDRESSES_MAPPING[netId];
+
+    if (!addresses) {
+      throw Error(`Network with id: "${netId}" is not supported.`);
+    }
+
+    return addresses;
   }
 }
