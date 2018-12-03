@@ -9,28 +9,30 @@ import * as AddressesJSONTest from '../config/contracts/1002.json';
 import { Block } from 'web3/eth/types';
 import { ITransactionRequest } from '../transactionRequest/ITransactionRequest';
 
-const NETWORK_ID = {
-  MAINNET: '1',
-  ROPSTEN: '3',
-  RINKEBY: '4',
-  KOVAN: '42',
-  DOCKER: '1001',
-  DEVELOPMENT: '1002',
-  TOBALABA: '401697'
-};
+export enum Networks {
+  Private = 0,
+  Mainnet = 1,
+  Morden = 2,
+  Ropsten = 3,
+  Rinkeby = 4,
+  Kovan = 42,
+  Docker = 1001,
+  Development = 1002,
+  Tobalaba = 401697
+}
 
 interface NetworkIdToNameMapType {
   [key: string]: EAC_NETWORK_NAME;
 }
 
 const NETWORK_ID_TO_NAME_MAP: NetworkIdToNameMapType = {
-  [NETWORK_ID.MAINNET]: 'mainnet',
-  [NETWORK_ID.ROPSTEN]: 'ropsten',
-  [NETWORK_ID.RINKEBY]: 'rinkeby',
-  [NETWORK_ID.KOVAN]: 'kovan',
-  [NETWORK_ID.DOCKER]: 'docker',
-  [NETWORK_ID.DEVELOPMENT]: 'development',
-  [NETWORK_ID.TOBALABA]: 'tobalaba'
+  [Networks.Mainnet]: 'mainnet',
+  [Networks.Ropsten]: 'ropsten',
+  [Networks.Rinkeby]: 'rinkeby',
+  [Networks.Kovan]: 'kovan',
+  [Networks.Docker]: 'docker',
+  [Networks.Development]: 'development',
+  [Networks.Tobalaba]: 'tobalaba'
 };
 
 type EAC_NETWORK_NAME =
@@ -44,9 +46,9 @@ type EAC_NETWORK_NAME =
   | 'tester';
 
 const REQUEST_FACTORY_STARTBLOCKS = {
-  [NETWORK_ID.MAINNET]: 6204104,
-  [NETWORK_ID.ROPSTEN]: 2594245,
-  [NETWORK_ID.KOVAN]: 5555500
+  [Networks.Mainnet]: 6204104,
+  [Networks.Ropsten]: 2594245,
+  [Networks.Kovan]: 5555500
 };
 
 const NETWORK_TO_ADDRESSES_MAPPING = {
@@ -190,6 +192,29 @@ export default class Util {
     const netId = await this.web3.eth.net.getId();
 
     return REQUEST_FACTORY_STARTBLOCKS[netId] || 0;
+  }
+
+  public async balanceOf(account: string): Promise<BigNumber> {
+    const balance = (await this.web3.eth.getBalance(account)).toString();
+
+    return new BigNumber(balance);
+  }
+
+  public async getBlock(blockNumber: string | number = 'latest'): Promise<Block> {
+    if (
+      ['genesis', 'latest', 'pending'].indexOf(blockNumber.toString()) === -1 &&
+      typeof blockNumber === 'string'
+    ) {
+      blockNumber = parseInt(blockNumber, 10);
+    }
+
+    const block = await this.web3.eth.getBlock(blockNumber as number);
+
+    if (block) {
+      return block;
+    }
+
+    throw Error(`Returned block ${blockNumber} is null`);
   }
 
   public async getContractsAddresses(): Promise<EACAddresses> {
