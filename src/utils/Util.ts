@@ -2,10 +2,12 @@ import BigNumber from 'bignumber.js';
 import Web3 = require('web3');
 import Constants from '../Constants';
 import * as ethUtil from 'ethereumjs-util';
-import { TransactionReceipt } from 'web3/types';
+import { TransactionReceipt, Subscribe } from 'web3/types';
 import { Provider } from 'web3/providers';
 import * as AddressesJSONKovan from '../config/contracts/42.json';
 import * as AddressesJSONTest from '../config/contracts/1002.json';
+import { Block } from 'web3/eth/types';
+import { ITransactionRequest } from '../transactionRequest/ITransactionRequest';
 
 const NETWORK_ID = {
   MAINNET: '1',
@@ -92,6 +94,7 @@ export default class Util {
 
     return new Web3(provider);
   }
+
   public static isHTTPConnection(url: string): boolean {
     return url.includes('http://') || url.includes('https://');
   }
@@ -199,5 +202,65 @@ export default class Util {
     }
 
     return addresses;
+  }
+
+  public stopFilter(filter: Subscribe<any>): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      let unsubscriptionSuccessful: boolean | void = false;
+
+      if (filter.subscription) {
+        unsubscriptionSuccessful = filter.subscription.unsubscribe();
+
+        resolve(unsubscriptionSuccessful || false);
+      } else {
+        (filter as any).unsubscribe((error: any, success: boolean) => {
+          if (success) {
+            resolve(success);
+          } else {
+            reject(error);
+          }
+        });
+      }
+    });
+  }
+
+  /*
+   * Takes an average of the last 100 blocks and estimates the
+   * blocktime.
+   */
+  public async getAverageBlockTime(): Promise<number> {
+    const numLookbackBlocks: number = 100;
+    const times: number[] = [];
+
+    const blockPromises: Promise<Block>[] = [];
+    const currentBlockNumber: number = await this.web3.eth.getBlockNumber();
+    const firstBlock: Block = await this.web3.eth.getBlock(currentBlockNumber - numLookbackBlocks);
+
+    for (let i = firstBlock.number; i < currentBlockNumber; i++) {
+      blockPromises.push(this.web3.eth.getBlock(i));
+    }
+
+    const resolvedBlocks: Block[] = await Promise.all(blockPromises);
+
+    let prevTimestamp = firstBlock.timestamp;
+    resolvedBlocks.forEach((block: Block) => {
+      const time = block.timestamp - prevTimestamp;
+      prevTimestamp = block.timestamp;
+      times.push(time);
+    });
+
+    if (times.length === 0) {
+      return 1;
+    }
+
+    return Math.round(times.reduce((a, b) => a + b) / times.length);
+  }
+
+  public calculateGasAmount(txRequest: ITransactionRequest): BigNumber {
+    return txRequest.callGas
+      .add(180000)
+      .div(64)
+      .times(65)
+      .round();
   }
 }
