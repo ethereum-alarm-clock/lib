@@ -96,8 +96,7 @@ export default class Analytics {
       (sum, tx) => sum.plus(tx.callValue),
       new BigNumber(0)
     );
-    const ethTransferred = this.web3.utils.fromWei(weiTransferred.toString(), 'ether');
 
-    return ethTransferred;
+    return this.web3.utils.fromWei(weiTransferred.toString(), 'ether');
   }
 }

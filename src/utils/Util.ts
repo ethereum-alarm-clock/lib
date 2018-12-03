@@ -4,8 +4,8 @@ import Constants from '../Constants';
 import * as ethUtil from 'ethereumjs-util';
 import { TransactionReceipt, Subscribe } from 'web3/types';
 import { Provider } from 'web3/providers';
-import * as AddressesJSONKovan from '../config/contracts/42.json';
-import * as AddressesJSONTest from '../config/contracts/1002.json';
+import * as AddressesJSONKovan from '../../config/contracts/42.json';
+import * as AddressesJSONTest from '../../config/contracts/1002.json';
 import { Block } from 'web3/eth/types';
 import { ITransactionRequest } from '../transactionRequest/ITransactionRequest';
 

@@ -27,8 +27,8 @@ export const scheduleTestTx = async (blocksInFuture = 270) => {
     // tslint:enable
   });
 
-  mainAccount = accounts[0];
-  secondaryAccount = accounts[1];
+  mainAccount = accounts[0].toLowerCase();
+  secondaryAccount = accounts[1].toLowerCase();
 
   const windowStart = new BigNumber((await web3.eth.getBlockNumber()) + blocksInFuture);
 
