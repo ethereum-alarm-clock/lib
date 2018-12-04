@@ -217,6 +217,10 @@ export default class Util {
     throw Error(`Returned block ${blockNumber} is null`);
   }
 
+  public async getTransactionCount(address: string): Promise<number> {
+    return this.web3.eth.getTransactionCount(address);
+  }
+
   public async getReceipt(transactionHash: string): Promise<TransactionReceipt> {
     return this.web3.eth.getTransactionReceipt(transactionHash);
   }
