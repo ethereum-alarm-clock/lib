@@ -229,6 +229,10 @@ export default class Util {
     return this.web3.eth.getTransaction(transactionHash);
   }
 
+  public toHex(value: any): string {
+    return this.web3.utils.toHex(value);
+  }
+
   public async getContractsAddresses(): Promise<EACAddresses> {
     const netId = await this.web3.eth.net.getId();
 
