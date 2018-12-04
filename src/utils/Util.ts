@@ -309,4 +309,20 @@ export default class Util {
       .times(65)
       .round();
   }
+
+  public async waitForConfirmations(
+    sentTransaction: PromiEvent<TransactionReceipt>,
+    desiredConfirmations: number = 12
+  ): Promise<TransactionReceipt> {
+    return new Promise<TransactionReceipt>(resolve => {
+      sentTransaction.on(
+        'confirmation',
+        (confirmationNumber: number, receipt: TransactionReceipt) => {
+          if (confirmationNumber >= desiredConfirmations) {
+            resolve(receipt);
+          }
+        }
+      );
+    });
+  }
 }
