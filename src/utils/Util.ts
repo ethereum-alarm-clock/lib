@@ -8,6 +8,7 @@ import * as AddressesJSONKovan from '../../config/contracts/42.json';
 import * as AddressesJSONTest from '../../config/contracts/1002.json';
 import { Block, Transaction } from 'web3/eth/types';
 import { ITransactionRequest } from '../transactionRequest/ITransactionRequest';
+import PromiEvent from 'web3/promiEvent';
 
 export enum Networks {
   Private = 0,
@@ -144,6 +145,10 @@ export default class Util {
     const foundLog = receipt.logs.find(log => log.topics[0] === Constants.NEWREQUESTLOG);
 
     return `0x${foundLog.data.slice(-40)}`;
+  }
+
+  public sendRawTransaction(transaction: string): PromiEvent<TransactionReceipt> {
+    return this.web3.eth.sendSignedTransaction(transaction);
   }
 
   /**
