@@ -6,7 +6,7 @@ import { TransactionReceipt, Subscribe } from 'web3/types';
 import { Provider } from 'web3/providers';
 import * as AddressesJSONKovan from '../../config/contracts/42.json';
 import * as AddressesJSONTest from '../../config/contracts/1002.json';
-import { Block } from 'web3/eth/types';
+import { Block, Transaction } from 'web3/eth/types';
 import { ITransactionRequest } from '../transactionRequest/ITransactionRequest';
 
 export enum Networks {
@@ -219,6 +219,10 @@ export default class Util {
 
   public async getReceipt(transactionHash: string): Promise<TransactionReceipt> {
     return this.web3.eth.getTransactionReceipt(transactionHash);
+  }
+
+  public async getTransaction(transactionHash: string): Promise<Transaction> {
+    return this.web3.eth.getTransaction(transactionHash);
   }
 
   public async getContractsAddresses(): Promise<EACAddresses> {
