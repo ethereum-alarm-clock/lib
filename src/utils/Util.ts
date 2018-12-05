@@ -314,7 +314,7 @@ export default class Util {
     sentTransaction: PromiEvent<TransactionReceipt>,
     desiredConfirmations: number = 12
   ): Promise<TransactionReceipt> {
-    return new Promise<TransactionReceipt>(resolve => {
+    return new Promise<TransactionReceipt>((resolve, reject) => {
       sentTransaction.on(
         'confirmation',
         (confirmationNumber: number, receipt: TransactionReceipt) => {
@@ -323,6 +323,8 @@ export default class Util {
           }
         }
       );
+
+      sentTransaction.on('error', reject);
     });
   }
 }
