@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "npm run compile",
+    "build": "npm run compile && cp package.json built",
     "compile": "tsc",
     "ganache": "ganache-cli -m \"shove afford modify census bridge good random error fault floor fringe oblige\" -i 1002",
     "lint": "tslint --project .",
+    "prepack": "npm run build",
     "typechain": "typechain --target=web3-1.0.0 \"src/abi/*.json\"",
     "test": "npm run test:e2e && npm run test:unit",
     "test:e2e": "mocha --timeout 50000 -r ts-node/register tests/e2e/*.ts --exit",
