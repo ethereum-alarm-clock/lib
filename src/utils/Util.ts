@@ -57,32 +57,6 @@ const NETWORK_TO_ADDRESSES_MAPPING = {
   1002: AddressesJSONTest
 };
 
-/**
- * @TODO refactor
- *
- * Used only in this lib
- *
- */
-// const waitForTransactionToBeMined = (web3, txHash, interval) => {
-//   interval = interval || 500
-//   const txReceiptAsync = (txHash, resolve, reject) => {
-//     web3.eth.getTransactionReceipt(txHash, (err, receipt) => {
-//       if (err) {
-//         reject(err)
-//       } else if (receipt == null) {
-//         setTimeout(() => {
-//           txReceiptAsync(txHash, resolve, reject)
-//         }, interval)
-//       } else {
-//         resolve(receipt)
-//       }
-//     })
-//   }
-//   return new Promise((resolve, reject) => {
-//     txReceiptAsync(txHash, resolve, reject)
-//   })
-// }
-
 export default class Util {
   public static getWeb3FromProviderUrl(providerUrl: string): Web3 {
     let provider: Provider;

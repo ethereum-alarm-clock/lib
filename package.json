@@ -1,8 +1,8 @@
 {
   "name": "@ethereum-alarm-clock/lib",
   "version": "0.0.1",
-  "description": "",
-  "main": "built/index.js",
+  "description": "TypeScript library for interacting with the Ethereum Alarm Clock contracts",
+  "main": "index.js",
   "scripts": {
     "postinstall": "npm run compile",
     "compile": "tsc",
@@ -64,5 +64,13 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ethereum-alarm-clock/lib.git"
+  },
+  "keywords": [
+    "ethereum",
+    "smart-contracts"
+  ]
 }

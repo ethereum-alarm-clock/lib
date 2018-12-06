@@ -137,8 +137,8 @@ export default class EAC {
     });
   }
 
-  public getTxRequestFromReceipt(receipt: any) {
-    const foundLog = receipt.logs.find((log: any) => log.topics[0] === Constants.NEWREQUESTLOG);
+  public getTxRequestFromReceipt(receipt: TransactionReceipt) {
+    const foundLog = receipt.logs.find(log => log.topics[0] === Constants.NEWREQUESTLOG);
 
     return '0x'.concat(foundLog.data.slice(-40));
   }

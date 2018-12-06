@@ -5,6 +5,7 @@ import { RequestFactory as RequestFactoryContract } from '../../types/web3-contr
 import { EventEmitter } from 'events';
 import { EventLog } from 'web3/types';
 import { TemporalUnit } from '../eac';
+import Constants from '../Constants';
 
 export default class RequestFactory {
   public instance: RequestFactoryContract;
@@ -65,11 +66,11 @@ export default class RequestFactory {
 
   // Assume the temporalUnit is blocks if not timestamp.
   public calcBucket(windowStart: number, temporalUnit: TemporalUnit) {
-    let bucketSize = 240; // block bucketsize
+    let bucketSize = Constants.BUCKET_SIZE.block;
     let sign = -1; // block sign
 
     if (temporalUnit === TemporalUnit.TIME) {
-      bucketSize = 3600; // timestamp bucketsize
+      bucketSize = Constants.BUCKET_SIZE.timestamp;
       sign = 1; // timestamp sign
     }
 

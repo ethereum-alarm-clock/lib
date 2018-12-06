@@ -319,73 +319,6 @@ export default class TransactionRequest implements ITransactionRequest {
   }
 
   /**
-   * Action Wrappers
-   */
-
-  /**
-   * Used in DAPP
-   *
-   * @TODO refactor
-   *
-   * @param {Object} params Transaction object including `from`, `gas`, `gasPrice` and `value`.
-   */
-  // public cancel(params) {
-  //   return new Promise((resolve, reject) => {
-  //     this.instance.cancel(params, (err, txHash) => {
-  //       if (err) { reject(err) }
-  //       else {
-  //         Util.waitForTransactionToBeMined(this.web3, txHash)
-  //           .then(receipt => resolve(receipt))
-  //           .catch(e => reject(e))
-  //       }
-  //     })
-  //   })
-  // }
-
-  /**
-   * Proxy
-   *
-   * Used in DAPP
-   *
-   * @TODO refactor
-   *
-   * @param {string} toAddress Ethereum address
-   * @param {string} data Hex encoded data for the transaction to proxy
-   * @param {Object} params Transaction object including `from`, `gas`, `gasPrice` and `value`.
-   */
-  // public proxy(toAddress : string, data : string, params : any) {
-  //   return new Promise((resolve, reject) => {
-  //     this.instance.proxy(toAddress, data, params, (err, txHash) => {
-  //       if (err) { reject(err) }
-  //       else {
-  //         Util.waitForTransactionToBeMined(this.web3, txHash)
-  //           .then(resolve) // resolves the receipt
-  //           .catch(reject) // rejects the error
-  //       }
-  //     })
-  //   })
-  // }
-
-  /**
-   * USED IN DAPP
-   *
-   * @TODO REFACTOR
-   *
-   * @param params
-   */
-  // public sendOwnerEther(params) {
-  //   return new Promise((resolve, reject) => {
-  //     this.instance.sendOwnerEther(params, (err, txHash) => {
-  //       if (err) { reject(err) }
-  //       else {
-  //         Util.waitForTransactionToBeMined(this.web3, txHash)
-  //           .then(resolve)
-  //           .catch(reject)
-  //       }
-  //     })
-  //   })
-  // }
-  /**
    * Error handling
    */
   private checkData() {
@@ -409,9 +342,9 @@ export default class TransactionRequest implements ITransactionRequest {
     const events = this.instance.events.allEvents({ fromBlock: 0 });
 
     return new Promise<ExecutedEvent>((resolve, reject) => {
-      events.on('event', (err: any, logs: EventLog[]) => {
-        if (err) {
-          return reject(err);
+      events.on('event', (error: Error, logs: EventLog[]) => {
+        if (error) {
+          return reject(error);
         }
 
         const Executed = logs.filter(
