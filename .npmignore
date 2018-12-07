@@ -3,3 +3,5 @@
 !package.json
 !types/**
 !config/**
+!src/global.d.ts
+!scripts/**
