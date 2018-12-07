@@ -1,5 +1,5 @@
 *
 !built/**
 !package.json
-!types
-!config
+!types/**
+!config/**
