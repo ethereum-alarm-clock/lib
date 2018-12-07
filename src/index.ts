@@ -1,7 +1,33 @@
 import Analytics from './analytics/Analytics';
 import EAC from './eac';
-import Util from './utils/Util';
-import GasPriceUtil from './utils/GasPriceUtil';
+import Util, { Networks } from './utils/Util';
+import GasPriceUtil, {
+  BlockScaleInfo,
+  EthGasStationInfo,
+  GasPriceEstimation,
+  IGasPriceFetchingService
+} from './utils/GasPriceUtil';
 import Constants from './Constants';
+import {
+  ITransactionRequest,
+  ITransactionRequestPending,
+  ITransactionRequestRaw
+} from './transactionRequest/ITransactionRequest';
+import RequestFactory from './requestFactory/RequestFactory';
 
-export { Analytics, Constants, EAC, GasPriceUtil, Util };
+export {
+  Analytics,
+  Constants,
+  EAC,
+  GasPriceUtil,
+  Util,
+  Networks,
+  BlockScaleInfo,
+  EthGasStationInfo,
+  GasPriceEstimation,
+  IGasPriceFetchingService,
+  ITransactionRequest,
+  ITransactionRequestPending,
+  ITransactionRequestRaw,
+  RequestFactory
+};
