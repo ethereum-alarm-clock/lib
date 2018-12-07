@@ -4,7 +4,6 @@
   "description": "TypeScript library for interacting with the Ethereum Alarm Clock contracts",
   "main": "built/index.js",
   "scripts": {
-    "postinstall": "npm run build",
     "build": "tsc",
     "ganache": "ganache-cli -m \"shove afford modify census bridge good random error fault floor fringe oblige\" -i 1002",
     "lint": "tslint --project .",
