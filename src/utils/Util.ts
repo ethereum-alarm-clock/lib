@@ -4,11 +4,16 @@ import Constants from '../Constants';
 import * as ethUtil from 'ethereumjs-util';
 import { TransactionReceipt, Subscribe } from 'web3/types';
 import { Provider } from 'web3/providers';
-import * as AddressesJSONKovan from '../../config/contracts/42.json';
-import * as AddressesJSONTest from '../../config/contracts/1002.json';
 import { Block, Transaction } from 'web3/eth/types';
 import { ITransactionRequest } from '../transactionRequest/ITransactionRequest';
 import PromiEvent from 'web3/promiEvent';
+
+import * as AddressesJSONMainnet from '../../config/contracts/1.json';
+import * as AddressesJSONRopsten from '../../config/contracts/3.json';
+import * as AddressesJSONRinkeby from '../../config/contracts/4.json';
+import * as AddressesJSONRSKTestnet from '../../config/contracts/31.json';
+import * as AddressesJSONKovan from '../../config/contracts/42.json';
+import * as AddressesJSONTest from '../../config/contracts/1002.json';
 
 export enum Networks {
   Private = 0,
@@ -16,6 +21,8 @@ export enum Networks {
   Morden = 2,
   Ropsten = 3,
   Rinkeby = 4,
+  // RSKMainNet = 30, not enabled yet
+  RSKTestNet = 31,
   Kovan = 42,
   Docker = 1001,
   Development = 1002,
@@ -30,6 +37,7 @@ const NETWORK_ID_TO_NAME_MAP: NetworkIdToNameMapType = {
   [Networks.Mainnet]: 'mainnet',
   [Networks.Ropsten]: 'ropsten',
   [Networks.Rinkeby]: 'rinkeby',
+  [Networks.RSKTestNet]: 'rsk_testnet',
   [Networks.Kovan]: 'kovan',
   [Networks.Docker]: 'docker',
   [Networks.Development]: 'development',
@@ -40,6 +48,7 @@ type EAC_NETWORK_NAME =
   | 'mainnet'
   | 'ropsten'
   | 'rinkeby'
+  | 'rsk_testnet'
   | 'kovan'
   | 'docker'
   | 'development'
@@ -49,10 +58,15 @@ type EAC_NETWORK_NAME =
 const REQUEST_FACTORY_STARTBLOCKS = {
   [Networks.Mainnet]: 6204104,
   [Networks.Ropsten]: 2594245,
-  [Networks.Kovan]: 5555500
+  [Networks.Kovan]: 5555500,
+  [Networks.RSKTestNet]: '0x21b0f'
 };
 
 const NETWORK_TO_ADDRESSES_MAPPING = {
+  1: AddressesJSONMainnet,
+  3: AddressesJSONRopsten,
+  4: AddressesJSONRinkeby,
+  31: AddressesJSONRSKTestnet,
   42: AddressesJSONKovan,
   1002: AddressesJSONTest
 };
