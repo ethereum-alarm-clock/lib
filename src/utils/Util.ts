@@ -13,7 +13,6 @@ import * as AddressesJSONRopsten from '../../config/contracts/3.json';
 import * as AddressesJSONRinkeby from '../../config/contracts/4.json';
 import * as AddressesJSONRSKTestnet from '../../config/contracts/31.json';
 import * as AddressesJSONKovan from '../../config/contracts/42.json';
-import * as AddressesJSONTest from '../../config/contracts/1002.json';
 
 export enum Networks {
   Private = 0,
@@ -67,8 +66,7 @@ const NETWORK_TO_ADDRESSES_MAPPING = {
   3: AddressesJSONRopsten,
   4: AddressesJSONRinkeby,
   31: AddressesJSONRSKTestnet,
-  42: AddressesJSONKovan,
-  1002: AddressesJSONTest
+  42: AddressesJSONKovan
 };
 
 export default class Util {
@@ -163,7 +161,7 @@ export default class Util {
   }
 
   public getABI(name: string) {
-    return require(`${__dirname}/build/abi/${name}.json`);
+    return require(`${__dirname}/../abi/${name}.json`);
   }
 
   /**

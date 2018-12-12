@@ -40,8 +40,3 @@ declare module '*42.json' {
   const value: EACAddresses;
   export = value;
 }
-
-declare module '*1002.json' {
-  const value: EACAddresses;
-  export = value;
-}
