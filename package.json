@@ -45,7 +45,7 @@
     "typescript": "3.1.6"
   },
   "dependencies": {
-    "@ethereum-alarm-clock/contracts": "github:ethereum-alarm-clock/ethereum-alarm-clock#add-migrate-to-scripts",
+    "@ethereum-alarm-clock/contracts": "github:ethereum-alarm-clock/ethereum-alarm-clock#5193f292bccb03fb0b1efbf2b1f900f28c3fd0b6",
     "@types/ethereumjs-util": "5.2.0",
     "bignumber.js": "5.0.0",
     "ethereumjs-util": "6.0.0",
