@@ -11,7 +11,7 @@ fi
 
 echo "Deploying contracts..."
 cd "$CONTRACTS_DIR"
-npm run network-clean
+npm run clean
 npm run migrate-reset
 cd "$LIB_DIR"
 
