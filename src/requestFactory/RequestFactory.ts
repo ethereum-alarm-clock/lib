@@ -1,11 +1,13 @@
 import Web3 = require('web3');
 import { Util } from '..';
-import RequestFactoryABI from '../abi/RequestFactory';
+import RequestFactoryABI from '../abi/RequestFactoryABI';
 import { RequestFactory as RequestFactoryContract } from '../../types/web3-contracts/RequestFactory';
 import { EventEmitter } from 'events';
 import { EventLog } from 'web3/types';
 import { TemporalUnit } from '../eac';
 import Constants from '../Constants';
+
+import { BlockType } from 'web3/eth/types';
 
 export default class RequestFactory {
   public instance: RequestFactoryContract;
@@ -75,5 +77,27 @@ export default class RequestFactory {
     }
 
     return sign * (windowStart - (windowStart % bucketSize));
+  }
+
+  public async getRequestCreatedEvents(
+    filter: object = {},
+    fromBlock: BlockType = 1,
+    toBlock: BlockType = 'latest',
+    topics: string[] = []
+  ): Promise<any[]> {
+    const events = await this.instance.getPastEvents('RequestCreated', {
+      filter,
+      fromBlock,
+      toBlock,
+      topics
+    });
+    return events;
+  }
+
+  public async getRequestsByOwner(owner: string, startBlock: BlockType, endBlock: BlockType) {
+    console.log(`Fetching for owner ${owner}`);
+    const events: any[] = await this.getRequestCreatedEvents({ owner }, startBlock, endBlock);
+    console.log(events);
+    return events.map(event => event.address);
   }
 }

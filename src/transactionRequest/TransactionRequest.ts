@@ -3,7 +3,7 @@ import TransactionRequestData from './TransactionRequestData';
 import Constants from '../Constants';
 import Util from '../utils/Util';
 import Web3 = require('web3');
-import TransactionRequestCoreABI from '../abi/TransactionRequestCore';
+import TransactionRequestCoreABI from '../abi/TransactionRequestCoreABI';
 import { TransactionRequestCore } from '../../types/web3-contracts/TransactionRequestCore';
 import { TemporalUnit } from '../eac';
 import { EventLog } from 'web3/types';
