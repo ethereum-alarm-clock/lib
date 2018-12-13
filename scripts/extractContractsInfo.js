@@ -1,4 +1,16 @@
-const artifactsDir = `${__dirname}/../node_modules/@ethereum-alarm-clock/contracts/build/contracts`;
+const args = process.argv.slice(2);
+
+/**
+ * args[0] - network
+ * args[1] - contracts' artifacts path
+ */
+
+let artifactsDir = `${__dirname}/../node_modules/@ethereum-alarm-clock/contracts/build/contracts`;
+
+if (args && args[1]) {
+  artifactsDir = args[1];
+}
+
 const contractsJSONDestination = `${__dirname}/../config/contracts/1002.json`;
 const fs = require('fs');
 const path = require('path');
@@ -11,7 +23,7 @@ const networks = {
   'development': 1002
 };
 
-const networkId = networks[process.argv[2]];
+const networkId = networks[args[0]];
 
 const contracts = {}
 
