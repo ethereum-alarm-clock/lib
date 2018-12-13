@@ -14,6 +14,7 @@ import {
   ITransactionRequestRaw
 } from './transactionRequest/ITransactionRequest';
 import RequestFactory from './requestFactory/RequestFactory';
+import TransactionRequestData from './transactionRequest/TransactionRequestData';
 
 export {
   Analytics,
@@ -29,5 +30,6 @@ export {
   ITransactionRequest,
   ITransactionRequestPending,
   ITransactionRequestRaw,
+  TransactionRequestData,
   RequestFactory
 };
