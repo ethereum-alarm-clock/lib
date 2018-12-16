@@ -15,6 +15,6 @@ before_script:
   - sleep 5
 script:
   - npm run lint
-  - ./scripts/deployContracts.sh
+  - npm run deploy-contracts
   - npm run build
   - npm run test
