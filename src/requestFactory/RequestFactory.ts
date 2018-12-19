@@ -11,12 +11,13 @@ import { BlockType } from 'web3/eth/types';
 
 export default class RequestFactory {
   public instance: RequestFactoryContract;
+  public util: Util;
   private web3: Web3;
 
   constructor(address: string, web3: Web3) {
-    const util = new Util(web3);
+    this.util = new Util(web3);
 
-    if (!util.isNotNullAddress(address)) {
+    if (!this.util.isNotNullAddress(address)) {
       throw new Error('Attempted to instantiate a RequestFactory class from a null address.');
     }
 
@@ -81,7 +82,7 @@ export default class RequestFactory {
 
   public async getRequestCreatedEvents(
     filter: object = {},
-    fromBlock: BlockType = 1,
+    fromBlock: BlockType = 'genesis',
     toBlock: BlockType = 'latest',
     topics: string[] = []
   ): Promise<any[]> {
@@ -91,13 +92,15 @@ export default class RequestFactory {
       toBlock,
       topics
     });
+    console.log(events);
     return events;
   }
 
   public async getRequestsByOwner(owner: string, startBlock: BlockType, endBlock: BlockType) {
-    console.log(`Fetching for owner ${owner}`);
+    startBlock = startBlock || (await this.util.getRequestFactoryStartBlock());
+    endBlock = endBlock || 'latest';
+
     const events: any[] = await this.getRequestCreatedEvents({ owner }, startBlock, endBlock);
-    console.log(events);
     return events.map(event => event.address);
   }
 }
