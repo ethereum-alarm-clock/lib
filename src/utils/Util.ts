@@ -13,7 +13,7 @@ import * as AddressesJSONRopsten from '../../config/contracts/3.json';
 import * as AddressesJSONRinkeby from '../../config/contracts/4.json';
 import * as AddressesJSONRSKTestnet from '../../config/contracts/31.json';
 import * as AddressesJSONKovan from '../../config/contracts/42.json';
-import * as AddressesJSONTest from '../../config/contracts/1002.json';
+import * as AddressesJSONTest from '../config/contracts/1002.json';
 
 export enum Networks {
   Private = 0,
