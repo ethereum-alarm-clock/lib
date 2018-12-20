@@ -1,10 +1,11 @@
 {
   "name": "@ethereum-alarm-clock/lib",
-  "version": "0.0.43",
+  "version": "0.0.46",
   "description": "TypeScript library for interacting with the Ethereum Alarm Clock contracts",
   "main": "built/index.js",
   "scripts": {
     "build": "tsc",
+    "deploy-contracts": "node scripts/deployContracts.js",
     "ganache": "ganache-cli -m \"shove afford modify census bridge good random error fault floor fringe oblige\" -i 1002",
     "lint": "tslint --project .",
     "prepack": "npm run build",
@@ -12,6 +13,9 @@
     "test": "npm run test:e2e && npm run test:unit",
     "test:e2e": "mocha --timeout 50000 -r ts-node/register tests/e2e/*.ts --exit",
     "test:unit": "mocha --timeout 50000 -r ts-node/register tests/unit/*.ts --exit"
+  },
+  "bin": {
+    "eac-deploy-contracts": "./scripts/deployContracts.js"
   },
   "author": "Kuzirashi",
   "contributors": [
@@ -45,7 +49,7 @@
     "typescript": "3.1.6"
   },
   "dependencies": {
-    "@ethereum-alarm-clock/contracts": "1.0.0-rc.2",
+    "@ethereum-alarm-clock/contracts": "github:ethereum-alarm-clock/ethereum-alarm-clock#e1b4db61ec43154117be5582bc92dc881dc27ea5",
     "@types/ethereumjs-util": "5.2.0",
     "bignumber.js": "5.0.0",
     "ethereumjs-util": "6.0.0",
