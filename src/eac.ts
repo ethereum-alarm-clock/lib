@@ -69,7 +69,7 @@ export default class EAC {
     options = await this.fillMissingOptions(options);
 
     const scheduler = await this.getScheduler(options.timestampScheduling);
-    const endowment = await scheduler.methods
+    return scheduler.methods
       .computeEndowment(
         options.bounty.toString(),
         options.fee.toString(),
@@ -78,7 +78,6 @@ export default class EAC {
         options.gasPrice.toString()
       )
       .call();
-    return endowment;
   }
 
   public async schedule(options: SchedulingOptions): Promise<TransactionReceipt> {
