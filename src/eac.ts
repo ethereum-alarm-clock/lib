@@ -64,13 +64,12 @@ export default class EAC {
     this.util = new Util(web3);
   }
 
-  public async computeEndowment(options: SchedulingOptions) {
+  public async computeEndowment(options: SchedulingOptions): Promise<string> {
     this.assertRequiredOptionsArePresent(options);
     options = await this.fillMissingOptions(options);
 
     const scheduler = await this.getScheduler(options.timestampScheduling);
-
-    return scheduler.methods
+    const endowment = await scheduler.methods
       .computeEndowment(
         options.bounty.toString(),
         options.fee.toString(),
@@ -79,6 +78,7 @@ export default class EAC {
         options.gasPrice.toString()
       )
       .call();
+    return endowment;
   }
 
   public async schedule(options: SchedulingOptions): Promise<TransactionReceipt> {
