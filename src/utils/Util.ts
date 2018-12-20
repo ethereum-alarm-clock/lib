@@ -113,10 +113,41 @@ export default class Util {
     return Util.isWatchingEnabled(web3);
   }
 
+  /**
+   * @TODO refactor, use this synchronous method instead of async call to contract in eac
+   *
+   * @param callGas
+   * @param callValue
+   * @param gasPrice
+   * @param fee
+   * @param bounty
+   */
+  public static calcEndowment(callGas: any, callValue: any, gasPrice: any, fee: any, bounty: any) {
+    const callGasBN = new BigNumber(callGas);
+    const callValueBN = new BigNumber(callValue);
+    const gasPriceBN = new BigNumber(gasPrice);
+    const feeBN = new BigNumber(fee);
+    const bountyBN = new BigNumber(bounty);
+
+    return bountyBN
+      .plus(feeBN)
+      .plus(callGasBN.times(gasPrice))
+      .plus(gasPriceBN.times(180000))
+      .plus(callValueBN);
+  }
+
   private web3: Web3;
 
   constructor(web3: Web3) {
     this.web3 = web3;
+  }
+
+  public async isNetworkSupported() {
+    const netId = await this.web3.eth.net.getId();
+    if ((Object as any).values(Networks).includes(netId)) {
+      return true;
+    }
+    return false;
   }
 
   public isNotNullAddress(address: string) {
@@ -135,29 +166,6 @@ export default class Util {
 
   public sendRawTransaction(transaction: string): PromiEvent<TransactionReceipt> {
     return this.web3.eth.sendSignedTransaction(transaction);
-  }
-
-  /**
-   * @TODO refactor, use this synchronous method instead of async call to contract in eac
-   *
-   * @param callGas
-   * @param callValue
-   * @param gasPrice
-   * @param fee
-   * @param bounty
-   */
-  public calcEndowment(callGas: any, callValue: any, gasPrice: any, fee: any, bounty: any) {
-    const callGasBN = new BigNumber(callGas);
-    const callValueBN = new BigNumber(callValue);
-    const gasPriceBN = new BigNumber(gasPrice);
-    const feeBN = new BigNumber(fee);
-    const bountyBN = new BigNumber(bounty);
-
-    return bountyBN
-      .plus(feeBN)
-      .plus(callGasBN.times(gasPrice))
-      .plus(gasPriceBN.times(180000))
-      .plus(callValueBN);
   }
 
   public getABI(name: string) {
