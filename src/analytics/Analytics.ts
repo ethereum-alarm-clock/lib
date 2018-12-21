@@ -44,7 +44,7 @@ export default class Analytics {
             (acc: any, tx: any) => acc + parseInt(tx.value, 10),
             0
           );
-          return this.web3.utils.fromWei(weiTransferred, 'ether');
+          return this.web3.utils.fromWei(weiTransferred.toString(), 'ether');
         } else {
           throw Error(response.result);
         }

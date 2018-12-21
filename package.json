@@ -46,7 +46,7 @@
     "tslint-microsoft-contrib": "5.2.1",
     "tslint-sonarts": "1.8.0",
     "typechain": "0.3.9",
-    "typescript": "3.1.6"
+    "typescript": "3.2.2"
   },
   "dependencies": {
     "@ethereum-alarm-clock/contracts": "github:ethereum-alarm-clock/ethereum-alarm-clock#e1b4db61ec43154117be5582bc92dc881dc27ea5",
@@ -55,7 +55,7 @@
     "ethereumjs-util": "6.0.0",
     "moment": "2.22.2",
     "node-fetch": "2.3.0",
-    "web3": "1.0.0-beta.36"
+    "web3": "1.0.0-beta.37"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

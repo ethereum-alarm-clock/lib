@@ -16,12 +16,7 @@ interface EACAddresses {
   transactionRequestCore: string;
 }
 
-declare module '*1002.json' {
-  const value: EACAddresses;
-  export = value;
-}
-
-declare module '*42.json' {
-  const value: EACAddresses;
-  export = value;
+declare module '*.json' {
+  const value: any;
+  export default value;
 }
