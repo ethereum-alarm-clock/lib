@@ -17,6 +17,7 @@ import RequestFactory from './requestFactory/RequestFactory';
 import TransactionRequestData from './transactionRequest/TransactionRequestData';
 import RequestFactoryABI from './abi/RequestFactoryABI';
 import TransactionRequestCoreABI from './abi/TransactionRequestCoreABI';
+import ISchedulingOptions from './scheduling/ISchedulingOptions';
 
 export {
   Analytics,
@@ -35,5 +36,6 @@ export {
   TransactionRequestData,
   TransactionRequestCoreABI,
   RequestFactory,
-  RequestFactoryABI
+  RequestFactoryABI,
+  ISchedulingOptions
 };

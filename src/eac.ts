@@ -12,13 +12,12 @@ import RequestFactory from './requestFactory/RequestFactory';
 import TransactionRequest from './transactionRequest/TransactionRequest';
 import { Util } from '.';
 import { ITransactionRequest } from './transactionRequest/ITransactionRequest';
+import ISchedulingOptions from './scheduling/ISchedulingOptions';
 
 export enum TemporalUnit {
   BLOCK = 1,
   TIME = 2
 }
-
-type Address = string;
 
 const MINIMUM_WINDOW_SIZE_TIMESTAMP = new BigNumber(5 * 60); // 5 minutes
 export const MINIMUM_WINDOW_SIZE_BLOCK = new BigNumber(16); // 16 blocks
@@ -27,21 +26,6 @@ export const CLAIM_WINDOW_SIZE_BLOCK = 255;
 export const DEFAULT_BOUNTY = new BigNumber('10000000000000000'); // 0.01 ETH
 export const DEFAULT_GAS_PRICE = new BigNumber('30000000000'); // 30 Gwei
 export const DEFAULT_WINDOW_SIZE_BLOCK = MINIMUM_WINDOW_SIZE_BLOCK.times(2);
-
-interface SchedulingOptions {
-  toAddress: Address;
-  windowStart: BigNumber;
-  timestampScheduling?: boolean;
-  bounty?: BigNumber;
-  from?: Address;
-  callData?: string;
-  callGas?: BigNumber;
-  callValue?: BigNumber;
-  windowSize?: BigNumber;
-  gasPrice?: BigNumber;
-  fee?: BigNumber;
-  requiredDeposit?: BigNumber;
-}
 
 enum SchedulingParamsError {
   InsufficientEndowment,
@@ -64,7 +48,7 @@ export default class EAC {
     this.util = new Util(web3);
   }
 
-  public async computeEndowment(options: SchedulingOptions): Promise<string> {
+  public async computeEndowment(options: ISchedulingOptions): Promise<string> {
     this.assertRequiredOptionsArePresent(options);
     options = await this.fillMissingOptions(options);
 
@@ -80,7 +64,7 @@ export default class EAC {
       .call();
   }
 
-  public async schedule(options: SchedulingOptions): Promise<TransactionReceipt> {
+  public async schedule(options: ISchedulingOptions): Promise<TransactionReceipt> {
     this.assertRequiredOptionsArePresent(options);
 
     options = await this.fillMissingOptions(options);
@@ -142,7 +126,7 @@ export default class EAC {
     return '0x'.concat(foundLog.data.slice(-40));
   }
 
-  public async validateScheduleOptions(options: SchedulingOptions, endowment: string) {
+  public async validateScheduleOptions(options: ISchedulingOptions, endowment: string) {
     const requestFactory = await this.requestFactory();
 
     const temporalUnit = options.timestampScheduling ? TemporalUnit.TIME : TemporalUnit.BLOCK;
@@ -233,17 +217,17 @@ export default class EAC {
     return new this.web3.eth.Contract(SchedulerInterfaceABI, address) as SchedulerInterface;
   }
 
-  private assertRequiredOptionsArePresent(options: SchedulingOptions) {
+  private assertRequiredOptionsArePresent(options: ISchedulingOptions) {
     if (!options.toAddress) {
-      throw new Error('toAddress in SchedulingOptions needs to be present.');
+      throw new Error('toAddress in ISchedulingOptions needs to be present.');
     }
 
     if (!options.windowStart) {
-      throw new Error('windowStart in SchedulingOptions needs to be present.');
+      throw new Error('windowStart in ISchedulingOptions needs to be present.');
     }
   }
 
-  private async fillMissingOptions(options: SchedulingOptions): Promise<SchedulingOptions> {
+  private async fillMissingOptions(options: ISchedulingOptions): Promise<ISchedulingOptions> {
     if (typeof options.timestampScheduling === 'undefined') {
       options.timestampScheduling = true;
     }
