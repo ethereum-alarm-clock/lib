@@ -311,10 +311,10 @@ export default class Util {
 
   public calculateGasAmount(txRequest: ITransactionRequest): BigNumber {
     return txRequest.callGas
-      .add(180000)
+      .plus(180000)
       .div(64)
       .times(65)
-      .round();
+      .decimalPlaces(0);
   }
 
   public async waitForConfirmations(
