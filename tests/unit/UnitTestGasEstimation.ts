@@ -18,12 +18,12 @@ describe('Gas Price Estimation Tests', async () => {
     });
 
     gasPriceValues.forEach(value => {
-      assert.isTrue(new BigNumber(result[value]).greaterThan(web3.utils.toWei('0.05', 'gwei')));
+      assert.isTrue(new BigNumber(result[value]).isGreaterThan(web3.utils.toWei('0.05', 'gwei')));
     });
 
-    assert.isTrue(result.safeLow.lessThanOrEqualTo(result.average));
-    assert.isTrue(result.average.lessThanOrEqualTo(result.fast));
-    assert.isTrue(result.fast.lessThanOrEqualTo(result.fastest));
+    assert.isTrue(result.safeLow.isLessThanOrEqualTo(result.average));
+    assert.isTrue(result.average.isLessThanOrEqualTo(result.fast));
+    assert.isTrue(result.fast.isLessThanOrEqualTo(result.fastest));
   });
 
   describe('EthGasStationFetchingService', async () => {
@@ -36,11 +36,11 @@ describe('Gas Price Estimation Tests', async () => {
     });
 
     gasPriceValues.forEach(value => {
-      assert.isTrue(new BigNumber(result[value]).greaterThan(web3.utils.toWei('0.05', 'gwei')));
+      assert.isTrue(new BigNumber(result[value]).isGreaterThan(web3.utils.toWei('0.05', 'gwei')));
     });
 
-    assert.isTrue(result.safeLow.lessThanOrEqualTo(result.average));
-    assert.isTrue(result.average.lessThanOrEqualTo(result.fast));
-    assert.isTrue(result.fast.lessThanOrEqualTo(result.fastest));
+    assert.isTrue(result.safeLow.isLessThanOrEqualTo(result.average));
+    assert.isTrue(result.average.isLessThanOrEqualTo(result.fast));
+    assert.isTrue(result.fast.isLessThanOrEqualTo(result.fastest));
   });
 });

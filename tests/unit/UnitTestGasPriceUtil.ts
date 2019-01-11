@@ -10,7 +10,7 @@ describe('Gas Price Util Unit Tests', async () => {
   describe('networkGasPrice()', () => {
     it('returns a number', async () => {
       const networkGasPrice = await util.networkGasPrice();
-      assert.isTrue(networkGasPrice.greaterThan(0));
+      assert.isTrue(networkGasPrice.isGreaterThan(0));
     });
   });
 
@@ -20,7 +20,7 @@ describe('Gas Price Util Unit Tests', async () => {
       const expectedFields = ['average', 'fast', 'fastest', 'safeLow'];
 
       expectedFields.forEach(field => {
-        assert.isTrue(advNetworkGasPrice[field].greaterThan(web3.utils.toWei('0.05', 'gwei')));
+        assert.isTrue(advNetworkGasPrice[field].isGreaterThan(web3.utils.toWei('0.05', 'gwei')));
       });
     });
   });

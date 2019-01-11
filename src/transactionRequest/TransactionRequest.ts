@@ -112,34 +112,35 @@ export default class TransactionRequest implements ITransactionRequest {
 
   public async beforeClaimWindow() {
     const now = await this.now();
-    return this.claimWindowStart.greaterThan(now);
+    return this.claimWindowStart.isGreaterThan(now);
   }
 
   public async inClaimWindow() {
     const now = await this.now();
-    return this.claimWindowStart.lessThanOrEqualTo(now) && this.claimWindowEnd.greaterThan(now);
+    return this.claimWindowStart.isLessThanOrEqualTo(now) && this.claimWindowEnd.isGreaterThan(now);
   }
 
   public async inFreezePeriod() {
     const now = await this.now();
-    return this.claimWindowEnd.lessThanOrEqualTo(now) && this.freezePeriodEnd.greaterThan(now);
+    return this.claimWindowEnd.isLessThanOrEqualTo(now) && this.freezePeriodEnd.isGreaterThan(now);
   }
 
   public async inExecutionWindow() {
     const now = await this.now();
     return (
-      this.windowStart.lessThanOrEqualTo(now) && this.executionWindowEnd.greaterThanOrEqualTo(now)
+      this.windowStart.isLessThanOrEqualTo(now) &&
+      this.executionWindowEnd.isGreaterThanOrEqualTo(now)
     );
   }
 
   public async inReservedWindow() {
     const now = await this.now();
-    return this.windowStart.lessThanOrEqualTo(now) && this.reservedWindowEnd.greaterThan(now);
+    return this.windowStart.isLessThanOrEqualTo(now) && this.reservedWindowEnd.isGreaterThan(now);
   }
 
   public async afterExecutionWindow() {
     const now = await this.now();
-    return this.executionWindowEnd.lessThan(now);
+    return this.executionWindowEnd.isLessThan(now);
   }
 
   public async executedAt() {
