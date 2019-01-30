@@ -75,7 +75,7 @@ export default class GasPriceUtil {
   }
 
   private async externalApiGasPrice(): Promise<GasPriceEstimation> {
-    const networkId: string = (await this.web3.eth.net.getId()).toString();
+    const networkId = await this.web3.eth.net.getId();
     const services = GAS_PRICE_FETCHING_SERVICES[networkId];
 
     if (!services) {

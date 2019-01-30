@@ -1,6 +1,7 @@
 import { expect, assert } from 'chai';
 import { Util } from '../../src';
 import { providerUrl } from '../helpers';
+import BigNumber from 'bignumber.js';
 
 describe('Util Unit Tests', async () => {
   const web3 = Util.getWeb3FromProviderUrl(providerUrl);
@@ -34,6 +35,18 @@ describe('Util Unit Tests', async () => {
     it('returns true when watching', async () => {
       const watching = await Util.isWatchingEnabled(web3);
       assert.isTrue(watching);
+    });
+  });
+
+  describe('estimateMaximumExecutionGasPrice()', () => {
+    it('estimates gasPrice > current gas price when bounty is higher than costs', () => {
+      const bounty = new BigNumber(web3.utils.toWei('0.02', 'ether'));
+      const gasPrice = new BigNumber(web3.utils.toWei('2', 'gwei'));
+      const callGas = new BigNumber(21000);
+
+      const estimation = Util.estimateMaximumExecutionGasPrice(bounty, gasPrice, callGas);
+
+      assert.isTrue(estimation.isGreaterThan(gasPrice));
     });
   });
 });
