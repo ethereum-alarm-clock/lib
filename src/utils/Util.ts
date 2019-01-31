@@ -71,6 +71,8 @@ const NETWORK_TO_ADDRESSES_MAPPING = {
   1002: AddressesJSONTest
 };
 
+const EXECUTION_OVERHEAD = 180000;
+
 export default class Util {
   public static getWeb3FromProviderUrl(providerUrl: string): Web3 {
     let provider: Provider;
@@ -134,8 +136,62 @@ export default class Util {
     return bountyBN
       .plus(feeBN)
       .plus(callGasBN.times(gasPrice))
-      .plus(gasPriceBN.times(180000))
+      .plus(gasPriceBN.times(EXECUTION_OVERHEAD))
       .plus(callValueBN);
+  }
+
+  public static estimateMaximumExecutionGasPrice(
+    bounty: BigNumber,
+    gasPrice: BigNumber,
+    callGas: BigNumber
+  ) {
+    if (!gasPrice || !callGas || !bounty) {
+      throw new Error('Missing arguments');
+    }
+
+    if (gasPrice.isNegative() || callGas.isNegative() || bounty.isNegative()) {
+      throw new Error('gasPrice, callGas and bounty has to be positive number');
+    }
+
+    const arbitraryCoefficient = 0.85;
+    const paymentModifier = 0.9;
+    const claimingGasAmount = 100000;
+    const claimingGasCost = gasPrice.times(claimingGasAmount);
+    const executionGasAmount = callGas.plus(EXECUTION_OVERHEAD);
+
+    return bounty
+      .times(paymentModifier)
+      .minus(claimingGasCost)
+      .dividedBy(executionGasAmount)
+      .times(arbitraryCoefficient)
+      .decimalPlaces(0);
+  }
+
+  public static estimateBountyForExecutionGasPrice(
+    gasPrice: BigNumber,
+    callGas: BigNumber,
+    additionalGasPrice: BigNumber
+  ) {
+    if (!gasPrice || !callGas || !additionalGasPrice) {
+      throw new Error('Missing arguments');
+    }
+
+    if (gasPrice.isNegative() || callGas.isNegative() || additionalGasPrice.isNegative()) {
+      throw new Error('gasPrice, callGas and additionalGasPrice has to be positive number');
+    }
+
+    const arbitraryCoefficient = 0.85;
+    const paymentModifier = 0.9;
+    const claimingGasAmount = 100000;
+    const claimingGasCost = gasPrice.times(claimingGasAmount);
+    const executionGasAmount = callGas.plus(EXECUTION_OVERHEAD);
+
+    return additionalGasPrice
+      .times(executionGasAmount)
+      .plus(claimingGasCost)
+      .dividedBy(paymentModifier)
+      .dividedBy(arbitraryCoefficient)
+      .decimalPlaces(0);
   }
 
   private web3: Web3;

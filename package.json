@@ -28,6 +28,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
+    "@types/ethereumjs-util": "5.2.0",
     "@types/chai": "4.1.7",
     "@types/node-fetch": "2.1.4",
     "@types/underscore": "1.8.9",
@@ -50,7 +51,6 @@
   },
   "dependencies": {
     "@ethereum-alarm-clock/contracts": "github:ethereum-alarm-clock/ethereum-alarm-clock#e1b4db61ec43154117be5582bc92dc881dc27ea5",
-    "@types/ethereumjs-util": "5.2.0",
     "bignumber.js": "8.0.1",
     "ethereumjs-util": "6.0.0",
     "moment": "2.23.0",
