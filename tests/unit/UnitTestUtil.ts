@@ -48,6 +48,18 @@ describe('Util Unit Tests', async () => {
 
       assert.isTrue(estimation.isGreaterThan(gasPrice));
     });
+
+    it('throw error when additional gas price is lower than 0', () => {
+      assert.throws(() =>
+        Util.estimateMaximumExecutionGasPrice(new BigNumber(1), new BigNumber(1), new BigNumber(-1))
+      );
+      assert.throws(() =>
+        Util.estimateMaximumExecutionGasPrice(new BigNumber(-1), new BigNumber(1), new BigNumber(1))
+      );
+      assert.throws(() =>
+        Util.estimateMaximumExecutionGasPrice(new BigNumber(1), new BigNumber(-1), new BigNumber(1))
+      );
+    });
   });
 
   describe('estimateBountyForExecutionGasPrice()', () => {
@@ -60,7 +72,6 @@ describe('Util Unit Tests', async () => {
       const callGas = new BigNumber(21000);
       const claimingGasAmount = 100000;
       const claimingCost = gasPrice.multipliedBy(claimingGasAmount);
-      const executionOverhead = new BigNumber(180000);
 
       const expectedBounty = claimingCost
         .dividedBy(paymentModifier)
@@ -70,6 +81,56 @@ describe('Util Unit Tests', async () => {
       const bounty = Util.estimateBountyForExecutionGasPrice(gasPrice, callGas, additionalGasPrice);
 
       assert.isTrue(expectedBounty.isEqualTo(bounty));
+    });
+
+    it('for 10GWei additional gasPrice the bounty is larger by the cost of extra execution gas', () => {
+      const arbitraryCoefficient = 0.85;
+      const paymentModifier = 0.9;
+
+      const gasPrice = new BigNumber(web3.utils.toWei('2', 'gwei'));
+      const additionalGasPrice = new BigNumber(web3.utils.toWei('10', 'gwei'));
+      const callGas = new BigNumber(21000);
+      const claimingGasAmount = 100000;
+      const claimingCost = gasPrice.multipliedBy(claimingGasAmount);
+      const executionOverheadGasAmount = 180000;
+
+      const additionalGasPriceCost = callGas
+        .plus(executionOverheadGasAmount)
+        .multipliedBy(additionalGasPrice);
+
+      const expectedBounty = claimingCost
+        .plus(additionalGasPriceCost)
+        .dividedBy(paymentModifier)
+        .dividedBy(arbitraryCoefficient)
+        .decimalPlaces(0);
+
+      const bounty = Util.estimateBountyForExecutionGasPrice(gasPrice, callGas, additionalGasPrice);
+
+      assert.isTrue(expectedBounty.isEqualTo(bounty));
+    });
+
+    it('throw error when additional gas price is lower than 0', () => {
+      assert.throws(() =>
+        Util.estimateBountyForExecutionGasPrice(
+          new BigNumber(1),
+          new BigNumber(1),
+          new BigNumber(-1)
+        )
+      );
+      assert.throws(() =>
+        Util.estimateBountyForExecutionGasPrice(
+          new BigNumber(-1),
+          new BigNumber(1),
+          new BigNumber(1)
+        )
+      );
+      assert.throws(() =>
+        Util.estimateBountyForExecutionGasPrice(
+          new BigNumber(1),
+          new BigNumber(-1),
+          new BigNumber(1)
+        )
+      );
     });
   });
 });

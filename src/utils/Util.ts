@@ -145,6 +145,14 @@ export default class Util {
     gasPrice: BigNumber,
     callGas: BigNumber
   ) {
+    if (!gasPrice || !callGas || !bounty) {
+      throw new Error('Missing arguments');
+    }
+
+    if (gasPrice.isNegative() || callGas.isNegative() || bounty.isNegative()) {
+      throw new Error('gasPrice, callGas and bounty has to be positive number');
+    }
+
     const arbitraryCoefficient = 0.85;
     const paymentModifier = 0.9;
     const claimingGasAmount = 100000;
@@ -164,6 +172,14 @@ export default class Util {
     callGas: BigNumber,
     additionalGasPrice: BigNumber
   ) {
+    if (!gasPrice || !callGas || !additionalGasPrice) {
+      throw new Error('Missing arguments');
+    }
+
+    if (gasPrice.isNegative() || callGas.isNegative() || additionalGasPrice.isNegative()) {
+      throw new Error('gasPrice, callGas and additionalGasPrice has to be positive number');
+    }
+
     const arbitraryCoefficient = 0.85;
     const paymentModifier = 0.9;
     const claimingGasAmount = 100000;
