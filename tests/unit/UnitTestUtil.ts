@@ -39,7 +39,7 @@ describe('Util Unit Tests', async () => {
   });
 
   describe('estimateMaximumExecutionGasPrice()', () => {
-    it('estimates gasPrice > current gas price when bounty is higher than costs', () => {
+    it('estimated gasPrice > current gas price when bounty is higher than costs', () => {
       const bounty = new BigNumber(web3.utils.toWei('0.02', 'ether'));
       const gasPrice = new BigNumber(web3.utils.toWei('2', 'gwei'));
       const callGas = new BigNumber(21000);
@@ -47,6 +47,29 @@ describe('Util Unit Tests', async () => {
       const estimation = Util.estimateMaximumExecutionGasPrice(bounty, gasPrice, callGas);
 
       assert.isTrue(estimation.isGreaterThan(gasPrice));
+    });
+  });
+
+  describe('estimateBountyForExecutionGasPrice()', () => {
+    it('for 0 additional gasPrice the bounty equals the costs', () => {
+      const arbitraryCoefficient = 0.85;
+      const paymentModifier = 0.9;
+
+      const gasPrice = new BigNumber(web3.utils.toWei('2', 'gwei'));
+      const additionalGasPrice = new BigNumber(0);
+      const callGas = new BigNumber(21000);
+      const claimingGasAmount = 100000;
+      const claimingCost = gasPrice.multipliedBy(claimingGasAmount);
+      const executionOverhead = new BigNumber(180000);
+
+      const expectedBounty = claimingCost
+        .dividedBy(paymentModifier)
+        .dividedBy(arbitraryCoefficient)
+        .decimalPlaces(0);
+
+      const bounty = Util.estimateBountyForExecutionGasPrice(gasPrice, callGas, additionalGasPrice);
+
+      assert.isTrue(expectedBounty.isEqualTo(bounty));
     });
   });
 });

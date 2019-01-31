@@ -159,6 +159,25 @@ export default class Util {
       .decimalPlaces(0);
   }
 
+  public static estimateBountyForExecutionGasPrice(
+    gasPrice: BigNumber,
+    callGas: BigNumber,
+    additionalGasPrice: BigNumber
+  ) {
+    const arbitraryCoefficient = 0.85;
+    const paymentModifier = 0.9;
+    const claimingGasAmount = 100000;
+    const claimingGasCost = gasPrice.times(claimingGasAmount);
+    const executionGasAmount = callGas.plus(EXECUTION_OVERHEAD);
+
+    return additionalGasPrice
+      .times(executionGasAmount)
+      .plus(claimingGasCost)
+      .dividedBy(paymentModifier)
+      .dividedBy(arbitraryCoefficient)
+      .decimalPlaces(0);
+  }
+
   private web3: Web3;
 
   constructor(web3: Web3) {
