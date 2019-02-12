@@ -92,16 +92,20 @@ export default class EAC {
 
     await this.validateScheduleOptions(options, endowment);
 
-    const scheduleTransaction = scheduler.methods.schedule(options.toAddress, options.callData, [
-      options.callGas.toString(),
-      options.callValue.toString(),
-      options.windowSize.toString(),
-      options.windowStart.toString(),
-      options.gasPrice.toString(),
-      options.fee.toString(),
-      options.bounty.toString(),
-      options.requiredDeposit.toString()
-    ]);
+    const scheduleTransaction = scheduler.methods.schedule(
+      options.toAddress,
+      this.web3.utils.hexToBytes(options.callData),
+      [
+        options.callGas.toString(),
+        options.callValue.toString(),
+        options.windowSize.toString(),
+        options.windowStart.toString(),
+        options.gasPrice.toString(),
+        options.fee.toString(),
+        options.bounty.toString(),
+        options.requiredDeposit.toString()
+      ]
+    );
 
     const encodedABI = scheduleTransaction.encodeABI();
 
