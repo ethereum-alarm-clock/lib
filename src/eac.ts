@@ -41,6 +41,7 @@ interface SchedulingOptions {
   gasPrice?: BigNumber;
   fee?: BigNumber;
   requiredDeposit?: BigNumber;
+  scheduleGas?: BigNumber;
 }
 
 enum SchedulingParamsError {
@@ -113,7 +114,7 @@ export default class EAC {
       to: scheduler._address,
       data: encodedABI,
       value: endowment,
-      gas: 600000
+      gas: options.scheduleGas.toNumber()
     };
 
     let sentTx: PromiEvent<TransactionReceipt>;
@@ -286,6 +287,10 @@ export default class EAC {
 
     if (typeof options.requiredDeposit === 'undefined') {
       options.requiredDeposit = new BigNumber('0');
+    }
+
+    if (typeof options.scheduleGas === 'undefined') {
+      options.scheduleGas = new BigNumber(600000);
     }
 
     return options;
