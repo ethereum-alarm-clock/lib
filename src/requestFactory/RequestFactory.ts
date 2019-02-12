@@ -43,10 +43,6 @@ export default class RequestFactory {
   ): EventEmitter {
     const options = { filter, fromBlock };
 
-    this.instance
-      .getPastEvents('RequestCreated', options)
-      .then(events => events.forEach(log => callback(null, log)));
-
     return this.instance.events.RequestCreated(options, callback);
   }
 
