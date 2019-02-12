@@ -259,7 +259,7 @@ export default class EAC {
     }
 
     if (typeof options.callData === 'undefined') {
-      options.callData = '';
+      options.callData = '0x0';
     }
 
     if (typeof options.callGas === 'undefined') {
