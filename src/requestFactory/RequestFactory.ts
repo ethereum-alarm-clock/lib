@@ -29,7 +29,7 @@ export default class RequestFactory {
   }
 
   get address() {
-    return this.instance._address;
+    return this.instance.options.address;
   }
 
   public isKnownRequest(requestAddress: string): Promise<boolean> {
@@ -41,7 +41,13 @@ export default class RequestFactory {
     fromBlock = 1,
     callback: (error: any, log: EventLog) => void
   ): EventEmitter {
-    return this.instance.events.RequestCreated({ filter, fromBlock }, callback);
+    const options = { filter, fromBlock };
+
+    this.instance
+      .getPastEvents('RequestCreated', options)
+      .then(events => events.forEach(log => callback(null, log)));
+
+    return this.instance.events.RequestCreated(options, callback);
   }
 
   public async stopWatch(event: EventEmitter) {
@@ -49,11 +55,13 @@ export default class RequestFactory {
   }
 
   public async watchRequestsByBucket(bucket: number, callback: any) {
+    const startBlock = (await this.util.getRequestFactoryStartBlock()) as number;
+
     return this.watchRequestCreatedLogs(
       {
         bucket
       },
-      1,
+      startBlock,
       // tslint:disable
       (_error: any, log: EventLog) => {
         //tslint:enable
