@@ -98,7 +98,7 @@ export default class Util {
         {
           jsonrpc: '2.0',
           id: new Date().getTime(),
-          method: 'eth_getFilterLogs',
+          method: 'eth_subscribe',
           params: ['0x16'] // we need to provide at least 1 argument, this is test data
         },
         (err: any) => {
