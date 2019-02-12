@@ -94,7 +94,7 @@ export default class EAC {
 
     const scheduleTransaction = scheduler.methods.schedule(
       options.toAddress,
-      this.web3.utils.fromAscii(options.callData),
+      this.web3.utils.hexToBytes(options.callData),
       [
         options.callGas.toString(),
         options.callValue.toString(),
@@ -259,7 +259,7 @@ export default class EAC {
     }
 
     if (typeof options.callData === 'undefined') {
-      options.callData = '';
+      options.callData = '0x0';
     }
 
     if (typeof options.callGas === 'undefined') {

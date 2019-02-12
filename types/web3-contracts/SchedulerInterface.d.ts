@@ -22,7 +22,7 @@ export class SchedulerInterface {
 
     schedule(
       _toAddress: string,
-      _callData: string | (string | number[])[],
+      _callData: string | number[],
       _uintArgs: (number | string)[]
     ): TransactionObject<string>;
   };
