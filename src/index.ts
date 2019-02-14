@@ -13,6 +13,7 @@ import {
   ITransactionRequestPending,
   ITransactionRequestRaw
 } from './transactionRequest/ITransactionRequest';
+import TransactionRequest from './transactionRequest/TransactionRequest';
 import RequestFactory from './requestFactory/RequestFactory';
 import TransactionRequestData from './transactionRequest/TransactionRequestData';
 import RequestFactoryABI from './abi/RequestFactoryABI';
@@ -32,6 +33,7 @@ export {
   ITransactionRequest,
   ITransactionRequestPending,
   ITransactionRequestRaw,
+  TransactionRequest,
   TransactionRequestData,
   TransactionRequestCoreABI,
   RequestFactory,
