@@ -13,6 +13,7 @@ import * as AddressesJSONRopsten from '../../config/contracts/3.json';
 import * as AddressesJSONRinkeby from '../../config/contracts/4.json';
 import * as AddressesJSONRSKTestnet from '../../config/contracts/31.json';
 import * as AddressesJSONKovan from '../../config/contracts/42.json';
+import * as AddressesJSONTobalaba from '../../config/contracts/401697.json';
 import * as AddressesJSONTest from '../../config/contracts/1002.json';
 
 export enum Networks {
@@ -68,6 +69,7 @@ const NETWORK_TO_ADDRESSES_MAPPING = {
   4: AddressesJSONRinkeby,
   31: AddressesJSONRSKTestnet,
   42: AddressesJSONKovan,
+  401697: AddressesJSONTobalaba,
   1002: AddressesJSONTest
 };
 
