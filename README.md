@@ -5,6 +5,12 @@
 [![Greenkeeper badge](https://badges.greenkeeper.io/ethereum-alarm-clock/lib.svg)](https://greenkeeper.io/)
 [![Coverage Status](https://coveralls.io/repos/github/ethereum-alarm-clock/lib/badge.svg?branch=master)](https://coveralls.io/github/ethereum-alarm-clock/lib?branch=master)
 
+# Install
+
+```
+npm install @ethereum-alarm-clock/lib --save
+```
+
 # lib
 
 This package contains all of the key logic necessary for the interacting with the [Ethereum Alarm Clock](https://github.com/ethereum-alarm-clock/ethereum-alarm-clock) contracts.
